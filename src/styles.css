@@ -431,6 +431,28 @@ form {
   background:
     linear-gradient(180deg, rgba(158, 232, 241, 0.14), rgba(255, 255, 255, 0)),
     #ffffff;
+  overflow: hidden;
+  padding: 0;
+}
+
+.demo-card img {
+  aspect-ratio: 16 / 10;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.demo-card h3,
+.demo-card p {
+  padding-inline: 20px;
+}
+
+.demo-card h3 {
+  margin-top: 18px;
+}
+
+.demo-card p {
+  padding-bottom: 20px;
 }
 
 .showcase article {
@@ -739,6 +761,10 @@ textarea:focus {
   .path-grid,
   .article-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .showcase {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .demo-grid {

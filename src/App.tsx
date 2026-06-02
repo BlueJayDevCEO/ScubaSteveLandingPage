@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { track } from "@vercel/analytics";
+import { media } from "./media";
 
 const APP_URL = "https://www.scubasteve.rocks";
 
@@ -78,19 +79,46 @@ const articles = [
 const demoActions = [
   {
     title: "Identify a fish from a dive photo",
-    text: "Upload a marine life image and get a useful identification starting point with diver-friendly context."
+    text: "Upload a marine life image and get a useful identification starting point with diver-friendly context.",
+    image: media.product.marineId
   },
   {
     title: "Ask a scuba question",
-    text: "Use Steve for learning support around scuba concepts, trip prep, and practical dive questions."
+    text: "Use Steve for learning support around scuba concepts, trip prep, and practical dive questions.",
+    image: media.product.aiChat
   },
   {
     title: "Plan a dive trip",
-    text: "Explore destinations, conditions, operator questions, and planning checks before you book."
+    text: "Explore destinations, conditions, operator questions, and planning checks before you book.",
+    image: media.product.tripPlanner
   },
   {
     title: "Improve an underwater photo",
-    text: "Open photo tools that help make underwater images clearer for sharing, review, and learning."
+    text: "Open photo tools that help make underwater images clearer for sharing, review, and learning.",
+    image: media.product.photoEnhancement
+  }
+];
+
+const showcaseItems = [
+  {
+    title: "Marine Life ID",
+    text: "Turn a dive photo into a useful identification starting point.",
+    image: media.product.marineId
+  },
+  {
+    title: "Trip Planner",
+    text: "Explore destination ideas, site context, and practical next steps.",
+    image: media.product.tripPlanner
+  },
+  {
+    title: "AI Chat",
+    text: "Ask scuba questions when curiosity shows up between dives.",
+    image: media.product.aiChat
+  },
+  {
+    title: "Photo Enhancement",
+    text: "Use real underwater samples to preview clearer ocean photo tools.",
+    image: media.product.photoEnhancement
   }
 ];
 
@@ -240,7 +268,7 @@ export default function App() {
     <div className="site-shell">
       <nav className="nav">
         <a className="brand" href="#top" aria-label="Scuba Steve AI home">
-          <img src="/images/osea-logo.png" alt="" />
+          <img src={media.brand.oseaLogo.src} alt="" />
           <span>Scuba Steve AI</span>
         </a>
         <div className="nav-links" aria-label="Primary navigation">
@@ -256,7 +284,7 @@ export default function App() {
 
       <header id="top" className="hero">
         <div className="hero-media" aria-hidden="true">
-          <img src="/images/marine-id-preview.png" alt="" />
+          <img src={media.hero.background.src} alt="" fetchPriority="high" />
         </div>
         <div className="hero-content">
           <p className="eyebrow">AI dive buddy for divers and dive businesses</p>
@@ -276,7 +304,7 @@ export default function App() {
         </div>
         <div className="device" aria-label="Scuba Steve product preview">
           <div className="device-top" />
-          <img src="/images/dive-plan-preview.png" alt="Scuba Steve dive trip planner preview" />
+          <img src={media.product.tripPlanner.src} alt={media.product.tripPlanner.alt} />
           <div className="device-caption">
             <strong>Try the live app</strong>
             <span>Marine ID, dive planning, scuba answers, and underwater photo tools in one pocket-sized assistant.</span>
@@ -362,6 +390,7 @@ export default function App() {
         <div className="demo-grid">
           {demoActions.map((action) => (
             <article key={action.title} className="demo-card">
+              <img src={action.image.src} alt={action.image.alt} loading="lazy" decoding="async" />
               <h3>{action.title}</h3>
               <p>{action.text}</p>
             </article>
@@ -370,21 +399,13 @@ export default function App() {
       </section>
 
       <section className="showcase">
-        <article>
-          <img src="/images/marine-id-preview.png" alt="Marine Life ID app preview" />
-          <h3>Marine Life ID</h3>
-          <p>Turn a dive photo into a useful identification starting point.</p>
-        </article>
-        <article>
-          <img src="/images/dive-plan-preview.png" alt="Dive Trip Planner app preview" />
-          <h3>Trip Planner</h3>
-          <p>Explore destination ideas, site context, and practical next steps.</p>
-        </article>
-        <article>
-          <img src="/images/ocean-trips-preview.png" alt="AI Chat app preview" />
-          <h3>AI Chat</h3>
-          <p>Ask scuba questions when curiosity shows up between dives.</p>
-        </article>
+        {showcaseItems.map((item) => (
+          <article key={item.title}>
+            <img src={item.image.src} alt={item.image.alt} loading="lazy" decoding="async" />
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
       </section>
 
       <section className="solution">
@@ -426,7 +447,7 @@ export default function App() {
       </section>
 
       <section id="about" className="section founder">
-        <img src="/images/osea-logo.png" alt="OSEA Diver founder Jay Van der Colff" />
+        <img src={media.brand.oseaLogo.src} alt="OSEA Diver founder Jay Van der Colff" />
         <div>
           <p className="eyebrow dark-eyebrow">Founder</p>
           <h2>Created by Jay Van der Colff</h2>
@@ -568,7 +589,7 @@ export default function App() {
 
       <footer className="site-footer">
         <div className="footer-brand">
-          <img src="/images/osea-logo.png" alt="OSEA Diver" />
+          <img src={media.brand.oseaLogo.src} alt={media.brand.oseaLogo.alt} />
           <div>
             <strong>OSEA Diver</strong>
             <span>Scuba Steve AI is created by OSEA Diver for practical scuba learning, dive planning, and ocean discovery.</span>
