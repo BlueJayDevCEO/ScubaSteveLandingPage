@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { track } from "@vercel/analytics";
 import { media } from "./media";
+import { futureNavigationRoutes } from "./routes";
 
 const APP_URL = "https://www.scubasteve.rocks";
 
@@ -41,6 +42,47 @@ const trustItems = [
   "Mobile-first tools"
 ];
 
+const diverUseContent = [
+  "Scuba Steve AI is built for divers who want one focused AI scuba app for the moments that happen before, between, and after dives. After a reef dive, a diver might have a photo of a fish, ray, nudibranch, or coral scene and want a useful starting point for marine life identification. Instead of guessing from memory, Scuba Steve helps turn the image into a learning prompt with practical context. It is not a substitute for a marine biologist or local guide, but it can help divers ask better questions and remember what they saw underwater.",
+  "Planning is the second major use. Divers can use Scuba Steve as a dive trip planner to think through destination ideas, operator questions, local conditions, travel logistics, and the details worth checking before booking. The goal is not to replace local briefings or professional judgement. It is to help divers prepare better questions before speaking with an instructor, dive centre, liveaboard, resort, or local operator.",
+  "For scuba learning, Scuba Steve works as a plain-language scuba AI assistant. Divers can ask about concepts they want to review between dives, from buoyancy and currents to equipment checks and trip preparation. The tone stays practical and safety-aware, reinforcing that certified training, local dive professionals, dive computers, tables, emergency services, and personal judgement remain essential.",
+  "Underwater photography is another common use. Water, depth, light loss, and suspended particles can make dive photos look flat or disappointing. Scuba Steve's underwater photo enhancement tools help divers review and improve images so sightings are easier to share, study, and remember. Together, marine life ID, dive planning, scuba answers, and photo tools make Scuba Steve a focused AI dive companion for real diver workflows.",
+  "For dive businesses, instructors, and resorts, that simple positioning matters. Scuba Steve is easy to explain to customers because it supports the questions divers already bring to a dive centre: what they saw, where they want to go, what they want to understand, and how to make their underwater photos clearer."
+];
+
+const faqs = [
+  {
+    question: "What is Scuba Steve AI?",
+    answer:
+      "Scuba Steve AI is an AI scuba app for divers who want help with marine life identification, dive trip planning, scuba learning, and underwater photo enhancement."
+  },
+  {
+    question: "Can Scuba Steve identify marine life from a dive photo?",
+    answer:
+      "Yes. Scuba Steve can help turn a dive photo into a marine life identification starting point, with practical context for divers and room for local expert confirmation."
+  },
+  {
+    question: "Does Scuba Steve work as a dive trip planner?",
+    answer:
+      "Yes. As a dive trip planner, Scuba Steve helps divers think through destination ideas, operator questions, local conditions, logistics, and planning steps before a trip."
+  },
+  {
+    question: "Is Scuba Steve a scuba AI assistant for beginners?",
+    answer:
+      "Yes. Beginners can use Scuba Steve as a scuba AI assistant for plain-language questions and learning support, while still relying on certified training and professional instruction."
+  },
+  {
+    question: "Can Scuba Steve help with underwater photo enhancement?",
+    answer:
+      "Yes. Scuba Steve includes underwater photo enhancement tools that help divers improve, review, and learn from underwater images."
+  },
+  {
+    question: "Does Scuba Steve replace dive training or emergency services?",
+    answer:
+      "No. Scuba Steve supports learning and planning only. It does not replace certified training, dive professionals, local briefings, emergency services, or personal dive judgement."
+  }
+];
+
 type SubmitState = "idle" | "loading" | "success" | "error";
 
 function trackLandingEvent(name: string, properties?: Record<string, string>) {
@@ -59,6 +101,7 @@ function scrollToId(id: string) {
 export default function App() {
   const [businessState, setBusinessState] = useState<SubmitState>("idle");
   const [businessError, setBusinessError] = useState("");
+  const futureTopicCount = futureNavigationRoutes.length;
 
   async function submitBusinessInterest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -106,7 +149,7 @@ export default function App() {
   }
 
   return (
-    <div className="site-shell">
+    <div className="site-shell" data-future-topic-count={futureTopicCount}>
       <nav className="nav">
         <a className="brand" href="#top" aria-label="Scuba Steve AI home">
           <img src={media.brand.oseaLogo.src} alt="" />
@@ -119,13 +162,13 @@ export default function App() {
 
       <header id="top" className="hero">
         <div className="hero-media" aria-hidden="true">
-          <img src={media.hero.background.src} alt="" fetchPriority="high" />
+          <img src={media.hero.background.src} alt="" />
         </div>
         <div className="hero-content">
           <p className="eyebrow">AI dive companion</p>
           <h1>Dive Smarter With Scuba Steve AI</h1>
           <p className="subheadline">
-            The AI dive companion for marine life identification, dive planning, scuba learning, and underwater photography.
+            The AI scuba app for marine life identification, dive planning, scuba learning, and underwater photography.
           </p>
           <div className="cta-row hero-actions">
             <button className="primary-cta primary-cta-strong" onClick={() => launchApp("hero")}>
@@ -138,7 +181,7 @@ export default function App() {
         </div>
         <div className="device" aria-label="Scuba Steve trip planner preview">
           <div className="device-top" />
-          <img src={media.product.tripPlanner.src} alt={media.product.tripPlanner.alt} />
+          <img src={media.product.tripPlanner.src} alt="Scuba Steve AI dive trip planner app preview for scuba destination planning" />
         </div>
       </header>
 
@@ -181,8 +224,35 @@ export default function App() {
         ))}
       </section>
 
+      <section className="seo-section">
+        <div className="section-heading">
+          <p className="eyebrow dark-eyebrow">How Divers Use Scuba Steve</p>
+          <h2>A focused scuba AI assistant for real dive workflows.</h2>
+        </div>
+        <div className="seo-copy">
+          {diverUseContent.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+
+      <section id="faq" className="faq-section">
+        <div className="section-heading">
+          <p className="eyebrow dark-eyebrow">Scuba Steve AI FAQ</p>
+          <h2>Common questions about the AI scuba app.</h2>
+        </div>
+        <div className="faq-list">
+          {faqs.map((faq) => (
+            <details key={faq.question}>
+              <summary>{faq.question}</summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       <section id="about" className="founder-section">
-        <img src={media.brand.oseaLogo.src} alt="OSEA Diver founder Jay Van der Colff" />
+        <img src={media.brand.oseaLogo.src} alt="OSEA Diver logo for Scuba Steve AI founder Jay Van der Colff" />
         <div>
           <p className="eyebrow dark-eyebrow">Founder</p>
           <h2>Created by Jay Van der Colff</h2>
@@ -205,7 +275,7 @@ export default function App() {
 
       <footer id="business-interest" className="site-footer">
         <div className="footer-brand">
-          <img src={media.brand.oseaLogo.src} alt={media.brand.oseaLogo.alt} />
+          <img src={media.brand.oseaLogo.src} alt="OSEA Diver logo for Scuba Steve AI scuba assistant" />
           <div>
             <strong>OSEA Diver</strong>
             <span>Scuba Steve AI is created by OSEA Diver for practical scuba learning, dive planning, and ocean discovery.</span>

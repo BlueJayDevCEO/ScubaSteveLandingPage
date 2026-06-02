@@ -246,18 +246,23 @@ h3 {
 
 .problem-section,
 .solution-section,
+.seo-section,
+.faq-section,
 .founder-section,
 .final-cta {
   padding: 58px clamp(18px, 5vw, 72px);
 }
 
 .problem-section,
-.solution-section {
+.solution-section,
+.faq-section {
   background: #f0f8fa;
   color: #092b35;
 }
 
 .solution-section,
+.seo-section,
+.faq-section,
 .founder-section {
   border-top: 1px solid #d8e7ea;
 }
@@ -268,6 +273,8 @@ h3 {
 
 .section-heading p,
 .solution-card p,
+.seo-copy p,
+.faq-list p,
 .founder-section p,
 .final-cta p {
   color: #4d6870;
@@ -339,6 +346,45 @@ h3 {
   height: 24px;
   justify-content: center;
   width: 24px;
+}
+
+.seo-section {
+  background: #ffffff;
+  color: #092b35;
+}
+
+.seo-copy {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  max-width: 920px;
+}
+
+.seo-copy p {
+  margin-bottom: 0;
+}
+
+.faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+  max-width: 920px;
+}
+
+.faq-list details {
+  background: #ffffff;
+  border: 1px solid #d8e7ea;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.faq-list p {
+  margin: 12px 0 0;
 }
 
 .founder-section {
@@ -570,6 +616,8 @@ textarea:focus {
 
   .problem-section,
   .solution-section,
+  .seo-section,
+  .faq-section,
   .founder-section,
   .final-cta {
     padding-block: 46px;

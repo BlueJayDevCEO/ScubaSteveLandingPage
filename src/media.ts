@@ -20,7 +20,7 @@ export const media = {
   },
   social: {
     ogImage: {
-      src: "https://scuba-steve-landing-page.vercel.app/images/scuba-steve-og.png",
+      src: "https://www.scubasteve.rocks/images/social/scuba-steve-og.png",
       alt: "Scuba Steve AI social preview",
       source: "Landing public/images/scuba-steve-og.png, matching ScubaSteveRocks public/images/social/scuba-steve-og.png",
       suggestedUse: "Open Graph and Twitter social preview",
@@ -46,28 +46,28 @@ export const media = {
   product: {
     marineId: {
       src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FID%20marinelife.webp?alt=media&token=5b0eb9cb-85a6-4bdf-bb4c-c651c2185eaf`,
-      alt: "Scuba Steve marine life identification tool preview",
+      alt: "Scuba Steve AI marine life identification app preview for divers",
       source: "ScubaSteveRocks components/ToolsHubView.tsx",
       suggestedUse: "Marine Life ID preview card",
       safeForPublicMarketing: true
     },
     tripPlanner: {
       src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FTrip%20planner.webp?alt=media&token=17861eab-d571-4d4b-89ee-9fd39c36f9b9`,
-      alt: "Scuba Steve dive trip planner tool preview",
+      alt: "Scuba Steve AI dive trip planner app preview for scuba travel planning",
       source: "ScubaSteveRocks components/ToolsHubView.tsx",
       suggestedUse: "Hero product device and trip planner preview card",
       safeForPublicMarketing: true
     },
     aiChat: {
       src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FSteve.png?alt=media&token=98017731-0889-4eb0-9367-14a953f2255b`,
-      alt: "Scuba Steve assistant chat preview",
+      alt: "Scuba Steve scuba AI assistant chat preview for dive questions",
       source: "ScubaSteveRocks components/ToolsHubView.tsx",
       suggestedUse: "AI chat preview card",
       safeForPublicMarketing: true
     },
     photoEnhancement: {
       src: "https://www.scubasteve.rocks/demo-color-after.svg",
-      alt: "Underwater photo enhancement color-correction preview",
+      alt: "Scuba Steve underwater photo enhancement color correction preview",
       source: "ScubaSteveRocks public/demo-color-after.svg",
       suggestedUse: "Underwater photo enhancement preview card",
       safeForPublicMarketing: true
