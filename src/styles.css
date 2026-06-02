@@ -368,7 +368,8 @@ h3 {
 .feature-grid,
 .showcase,
 .path-grid,
-.article-grid {
+.article-grid,
+.demo-grid {
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr;
@@ -376,7 +377,8 @@ h3 {
 
 .feature-grid,
 .path-grid,
-.article-grid {
+.article-grid,
+.demo-grid {
   margin-top: 34px;
 }
 
@@ -384,6 +386,7 @@ h3 {
 .showcase article,
 .path-card,
 .article-card,
+.demo-card,
 form {
   background: #ffffff;
   border: 1px solid #d8e7ea;
@@ -393,7 +396,8 @@ form {
 
 .feature-card,
 .path-card,
-.article-card {
+.article-card,
+.demo-card {
   padding: 26px;
 }
 
@@ -421,6 +425,12 @@ form {
 
 .showcase {
   background: #e7f3f5;
+}
+
+.demo-card {
+  background:
+    linear-gradient(180deg, rgba(158, 232, 241, 0.14), rgba(255, 255, 255, 0)),
+    #ffffff;
 }
 
 .showcase article {
@@ -654,6 +664,7 @@ textarea:focus {
   .problem-grid,
   .path-grid,
   .article-grid,
+  .demo-grid,
   .form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -677,6 +688,10 @@ textarea:focus {
   .path-grid,
   .article-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .demo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .solution,

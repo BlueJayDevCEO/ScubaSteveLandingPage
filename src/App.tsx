@@ -5,9 +5,9 @@ const APP_URL = "https://www.scubasteve.rocks";
 
 const trustItems = [
   "Built from real scuba instruction experience",
-  "Designed for divers, not generic travel users",
-  "Mobile-first experience",
-  "Practical underwater knowledge"
+  "Diver-first design for real questions",
+  "Safety-aware learning and planning",
+  "Mobile-first dive tools"
 ];
 
 const features = [
@@ -16,12 +16,20 @@ const features = [
     text: "Upload a photo and identify marine species with useful context for divers."
   },
   {
-    title: "Dive Trip Planner",
-    text: "Get destination ideas, trip checks, and dive planning prompts before you go."
+    title: "AI Dive Questions",
+    text: "Ask scuba questions in plain language and get clear learning support before your next dive."
   },
   {
-    title: "AI Dive Instructor",
-    text: "Ask scuba questions and learn faster before your next dive."
+    title: "Dive Trip Planner",
+    text: "Get destination ideas, trip checks, and planning prompts before you go."
+  },
+  {
+    title: "Underwater Photo Enhancement",
+    text: "Use Scuba Steve's ocean photo tools to make underwater images clearer and easier to review."
+  },
+  {
+    title: "Ocean Articles / Learning",
+    text: "Explore practical ocean knowledge, marine life explainers, and scuba learning articles."
   }
 ];
 
@@ -29,7 +37,7 @@ const paths = [
   {
     title: "For Divers",
     points: ["Identify marine life", "Plan dive trips", "Ask scuba questions"],
-    cta: "Launch Scuba Steve",
+    cta: "Try Scuba Steve Free",
     action: "launch"
   },
   {
@@ -67,6 +75,25 @@ const articles = [
   }
 ];
 
+const demoActions = [
+  {
+    title: "Identify a fish from a dive photo",
+    text: "Upload a marine life image and get a useful identification starting point with diver-friendly context."
+  },
+  {
+    title: "Ask a scuba question",
+    text: "Use Steve for learning support around scuba concepts, trip prep, and practical dive questions."
+  },
+  {
+    title: "Plan a dive trip",
+    text: "Explore destinations, conditions, operator questions, and planning checks before you book."
+  },
+  {
+    title: "Improve an underwater photo",
+    text: "Open photo tools that help make underwater images clearer for sharing, review, and learning."
+  }
+];
+
 const problems = [
   "Forgot the name of a fish",
   "Need dive trip ideas",
@@ -78,7 +105,7 @@ const faqs = [
   {
     question: "Is Scuba Steve a replacement for dive training?",
     answer:
-      "No. Scuba Steve is a planning and learning companion. It does not replace certified training, professional dive briefings, local operators, or safe in-water judgment."
+      "No. Scuba Steve is an educational and planning assistant. It does not replace certified scuba training, professional dive briefings, local operators, emergency services, or personal dive judgement."
   },
   {
     question: "Can Scuba Steve identify marine life?",
@@ -223,7 +250,7 @@ export default function App() {
           <a href="#faq">FAQ</a>
         </div>
         <button className="nav-button" onClick={() => launchApp("nav")}>
-          Launch App
+          Try Free
         </button>
       </nav>
 
@@ -233,20 +260,17 @@ export default function App() {
         </div>
         <div className="hero-content">
           <p className="eyebrow">AI dive buddy for divers and dive businesses</p>
-          <h1>Your AI Dive Buddy</h1>
-          <p className="subheadline">Plan dives. Identify marine life. Learn faster. Dive smarter.</p>
+          <h1>Dive Smarter With Scuba Steve AI</h1>
+          <p className="subheadline">Identify marine life. Plan dive trips. Ask scuba questions. Improve underwater photos.</p>
           <p className="supporting">
-            Scuba Steve AI is a scuba trip planner, marine life identification helper, scuba learning assistant, and future dive centre AI assistant.
+            Launch the free Scuba Steve app for marine life ID, dive trip planning, scuba answers, and underwater photo tools built for divers.
           </p>
           <div className="cta-row hero-actions">
             <button className="primary-cta primary-cta-strong" onClick={() => launchApp("hero")}>
-              Launch Scuba Steve
+              Try Scuba Steve Free
             </button>
             <button className="secondary-cta" onClick={() => openEarlyAccess("hero")}>
               Join Early Access
-            </button>
-            <button className="business-cta" onClick={() => openBusinessInterest("hero")}>
-              Partner With Steve
             </button>
           </div>
         </div>
@@ -254,8 +278,8 @@ export default function App() {
           <div className="device-top" />
           <img src="/images/dive-plan-preview.png" alt="Scuba Steve dive trip planner preview" />
           <div className="device-caption">
-            <strong>Launch the live app</strong>
-            <span>Marine ID, trip planning, and scuba answers in one pocket-sized assistant.</span>
+            <strong>Try the live app</strong>
+            <span>Marine ID, dive planning, scuba answers, and underwater photo tools in one pocket-sized assistant.</span>
           </div>
         </div>
       </header>
@@ -284,7 +308,7 @@ export default function App() {
                   <li key={point}>{point}</li>
                 ))}
               </ul>
-              {path.action === "launch" && <button onClick={() => launchApp("path-divers")}>{path.cta}</button>}
+              {path.action === "launch" && <button onClick={() => launchApp("path-divers")}>Try Scuba Steve Free</button>}
               {path.action === "business" && <button onClick={() => openBusinessInterest("path-business")}>{path.cta}</button>}
               {path.action === "articles" && (
                 <button
@@ -304,8 +328,8 @@ export default function App() {
       <section id="features" className="section white">
         <div className="section-heading">
           <p className="eyebrow dark-eyebrow">Built for action</p>
-          <h2>Three fast ways to dive smarter.</h2>
-          <p>Clear paths into Scuba Steve for the questions divers actually need between dives, before trips, and after sightings.</p>
+          <h2>The highest-value tools first.</h2>
+          <p>Scuba Steve focuses on the jobs divers reach for most: identifying marine life, asking dive questions, planning trips, improving photos, and learning between dives.</p>
         </div>
         <div className="feature-grid">
           {features.map((feature) => (
@@ -315,11 +339,31 @@ export default function App() {
               <button
                 onClick={() => {
                   trackLandingEvent("feature_card_click", { feature: feature.title });
+                  if (feature.title === "Ocean Articles / Learning") {
+                    scrollToId("articles");
+                    return;
+                  }
                   launchApp(`feature-${feature.title}`);
                 }}
               >
-                Try This Feature →
+                {feature.title === "Ocean Articles / Learning" ? "Read Articles →" : "Try This Feature →"}
               </button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section light demos">
+        <div className="section-heading">
+          <p className="eyebrow dark-eyebrow">What you can do with Steve</p>
+          <h2>Simple dive tasks, handled in one place.</h2>
+          <p>Use Scuba Steve when you want a fast starting point, a clearer plan, or a better way to learn from what you saw underwater.</p>
+        </div>
+        <div className="demo-grid">
+          {demoActions.map((action) => (
+            <article key={action.title} className="demo-card">
+              <h3>{action.title}</h3>
+              <p>{action.text}</p>
             </article>
           ))}
         </div>
@@ -361,8 +405,8 @@ export default function App() {
       <section id="articles" className="section light articles">
         <div className="section-heading">
           <p className="eyebrow dark-eyebrow">Ocean Articles & Dive Knowledge</p>
-          <h2>Learning signals that Scuba Steve is active, useful, and educational.</h2>
-          <p>Static previews for now, ready to replace with real articles or a CMS later.</p>
+          <h2>Practical scuba and ocean knowledge for curious divers.</h2>
+          <p>Short learning previews help divers understand marine life, plan trips more carefully, and keep building scuba confidence between dives.</p>
         </div>
         <div className="article-grid">
           {articles.map((article) => (
@@ -382,12 +426,12 @@ export default function App() {
       </section>
 
       <section id="about" className="section founder">
-        <img src="/images/osea-logo.png" alt="Jay Van der Colff founder placeholder" />
+        <img src="/images/osea-logo.png" alt="OSEA Diver founder Jay Van der Colff" />
         <div>
           <p className="eyebrow dark-eyebrow">Founder</p>
           <h2>Created by Jay Van der Colff</h2>
           <p>
-            Created by Jay Van der Colff, founder of OSEA Diver, to make scuba knowledge more accessible to divers, dive centres, and ocean explorers worldwide.
+            Scuba Steve is created by Jay Van der Colff, founder of OSEA Diver, based on real scuba instruction experience and a practical goal: make useful scuba knowledge easier to access.
           </p>
           <ul className="cred-list">
             <li>Built from real scuba instruction experience</li>
@@ -511,7 +555,7 @@ export default function App() {
         <p>Divers can launch now. Businesses can register interest. Learners can start with ocean knowledge.</p>
         <div className="cta-row center">
           <button className="primary-cta primary-cta-strong" onClick={() => launchApp("final")}>
-            Launch Scuba Steve
+            Try Scuba Steve Free
           </button>
           <button className="secondary-cta" onClick={() => openEarlyAccess("final")}>
             Join Early Access
