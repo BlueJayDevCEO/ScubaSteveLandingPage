@@ -4,7 +4,7 @@ Standalone activation-first landing page for Scuba Steve AI.
 
 Primary goal: send visitors to the Scuba Steve app at `https://www.scubasteve.rocks`.
 
-Secondary goal: collect early-access email leads for visitors who are not ready to launch the app.
+Secondary goals: collect diver early-access leads, capture dive business interest, and preview educational article content for SEO and trust.
 
 ## Stack
 
@@ -62,6 +62,36 @@ Fields:
 
 Duplicate protection uses a SHA-256 hash of the normalized email address as the Firestore document ID.
 
+## Business Interest Capture
+
+Endpoint:
+
+```bash
+POST /api/business-interest
+```
+
+Stored Firestore collection:
+
+```text
+businessInterestLeads
+```
+
+Fields:
+
+- `name`
+- `email`
+- `businessName`
+- `businessType`
+- `country`
+- `website`
+- `message`
+- `source=landing-page`
+- `createdAt`
+- `userAgent`
+- `referrer`
+
+Duplicate protection uses a SHA-256 hash of the normalized email address as the Firestore document ID.
+
 ## Required Environment Variables
 
 Set in Vercel Project Settings. Do not expose these as `VITE_*` variables.
@@ -86,10 +116,14 @@ FIREBASE_PRIVATE_KEY=...
 2. Set the Firebase Admin environment variables above.
 3. Deploy.
 4. Submit the early-access form once and confirm a document appears in `earlyAccessLeads`.
+5. Submit the business interest form once and confirm a document appears in `businessInterestLeads`.
 
 ## Analytics Events
 
 - `launch_app_click`
-- `join_early_access_click`
-- `early_access_signup_success`
+- `early_access_open`
+- `early_access_submit_success`
+- `business_interest_open`
+- `business_interest_submit_success`
+- `article_card_click`
 - `feature_card_click`

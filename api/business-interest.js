@@ -13,14 +13,14 @@ const ALLOWED_ORIGINS = new Set([
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const FIRESTORE_SCOPE = "https://www.googleapis.com/auth/datastore";
-const COLLECTION_NAME = "earlyAccessLeads";
+const COLLECTION_NAME = "businessInterestLeads";
 
 let cachedAccessToken = null;
 let cachedAccessTokenExpiry = 0;
 
 function setCors(req, res) {
   const origin = String(req.headers.origin || "");
-  const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "https://www.scubasteve.rocks";
+  const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "https://scuba-steve-landing-page.vercel.app";
   res.setHeader("Access-Control-Allow-Origin", allowOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -38,7 +38,7 @@ function readJsonBody(req) {
   }
 }
 
-function sanitizeText(value, maxLength = 120) {
+function sanitizeText(value, maxLength = 180) {
   return String(value || "").trim().slice(0, maxLength);
 }
 
@@ -145,16 +145,23 @@ export default async function handler(req, res) {
 
   const body = readJsonBody(req);
   const email = sanitizeText(body.email, 254).toLowerCase();
-  const name = sanitizeText(body.name);
-  const diverLevel = sanitizeText(body.diverLevel);
+  const lead = {
+    name: sanitizeText(body.name),
+    email,
+    businessName: sanitizeText(body.businessName),
+    businessType: sanitizeText(body.businessType),
+    country: sanitizeText(body.country),
+    website: sanitizeText(body.website, 300),
+    message: sanitizeText(body.message, 1000)
+  };
 
-  if (!EMAIL_PATTERN.test(email)) {
-    return res.status(400).json({ error: "Please enter a valid email address." });
+  if (!lead.name || !EMAIL_PATTERN.test(email) || !lead.businessName || !lead.businessType || !lead.country) {
+    return res.status(400).json({ error: "Please complete the required business fields." });
   }
 
   const credentials = getFirebaseCredentials();
   if (!credentials?.projectId || !credentials?.clientEmail || !credentials?.privateKey) {
-    return res.status(503).json({ error: "Early access signup is not configured yet." });
+    return res.status(503).json({ error: "Business interest signup is not configured yet." });
   }
 
   const documentId = crypto.createHash("sha256").update(email).digest("hex");
@@ -167,9 +174,7 @@ export default async function handler(req, res) {
     }
 
     const payload = toFirestoreFields({
-      email,
-      name,
-      diverLevel,
+      ...lead,
       source: "landing-page",
       createdAt: new Date(),
       userAgent: sanitizeText(req.headers["user-agent"], 500),
@@ -187,6 +192,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ ok: true, duplicate: false });
   } catch {
-    return res.status(500).json({ error: "We could not add you right now. Please try again in a moment." });
+    return res.status(500).json({ error: "We could not register your interest right now. Please try again in a moment." });
   }
 }
