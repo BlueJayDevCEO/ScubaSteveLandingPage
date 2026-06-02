@@ -644,6 +644,57 @@ textarea:focus {
   max-width: 760px;
 }
 
+.site-footer {
+  align-items: start;
+  background: #041a22;
+  color: rgba(238, 252, 255, 0.84);
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 1fr;
+  padding: 34px 6vw;
+}
+
+.footer-brand {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+}
+
+.footer-brand img {
+  background: #ffffff;
+  border-radius: 12px;
+  height: 58px;
+  object-fit: contain;
+  padding: 8px;
+  width: 58px;
+}
+
+.footer-brand strong,
+.footer-details strong {
+  color: #ffffff;
+}
+
+.footer-brand span {
+  color: rgba(238, 252, 255, 0.76);
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-top: 4px;
+  max-width: 620px;
+}
+
+.footer-details {
+  display: grid;
+  gap: 8px;
+}
+
+.footer-details p {
+  color: rgba(238, 252, 255, 0.76);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
 .center {
   justify-content: center;
 }
@@ -699,6 +750,10 @@ textarea:focus {
   .early-access,
   .business-section {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer {
+    grid-template-columns: 1.1fr 0.9fr;
   }
 }
 
@@ -762,6 +817,10 @@ textarea:focus {
   .safety-note,
   .final-cta {
     padding-block: 56px;
+  }
+
+  .footer-brand {
+    align-items: flex-start;
   }
 
   .primary-cta,

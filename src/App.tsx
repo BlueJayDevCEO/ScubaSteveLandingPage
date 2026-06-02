@@ -565,6 +565,30 @@ export default function App() {
           </button>
         </div>
       </section>
+
+      <footer className="site-footer">
+        <div className="footer-brand">
+          <img src="/images/osea-logo.png" alt="OSEA Diver" />
+          <div>
+            <strong>OSEA Diver</strong>
+            <span>Scuba Steve AI is created by OSEA Diver for practical scuba learning, dive planning, and ocean discovery.</span>
+          </div>
+        </div>
+        <div className="footer-details" aria-label="OSEA business details">
+          <p>
+            <strong>Founder:</strong> Jay Van der Colff
+          </p>
+          <p>
+            <strong>Business:</strong> OSEA Diver
+          </p>
+          <p>
+            <strong>Enquiries:</strong> Use the dive business interest form above.
+          </p>
+          <p>
+            <strong>Safety:</strong> Scuba Steve does not replace certified training, professional briefings, local operators, emergency services, or personal dive judgement.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
