@@ -509,6 +509,10 @@ textarea {
   resize: vertical;
 }
 
+.honeypot-field {
+  display: none;
+}
+
 input:focus,
 select:focus,
 textarea:focus {

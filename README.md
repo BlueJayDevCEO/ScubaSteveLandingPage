@@ -1,10 +1,12 @@
 # Scuba Steve AI Landing Page
 
-Standalone activation-first landing page for Scuba Steve AI.
+Standalone landing page for Scuba Steve AI, built to introduce the product, send visitors into the app, and capture dive business interest.
 
-Primary goal: send visitors to the Scuba Steve app at `https://www.scubasteve.rocks`.
+## Current Goals
 
-Secondary goals: collect diver early-access leads, capture dive business interest, and preview educational article content for SEO and trust.
+- Send visitors to the Scuba Steve app through the primary CTA.
+- Capture business interest from dive centres, resorts, liveaboards, instructors, and travel companies.
+- Provide SEO-friendly product copy and FAQs for the AI scuba app.
 
 ## Stack
 
@@ -12,7 +14,7 @@ Secondary goals: collect diver early-access leads, capture dive business interes
 - Vite
 - TypeScript
 - Vercel Analytics
-- Vercel Serverless Function for `/api/early-access`
+- Vercel Serverless Functions
 - Firebase Firestore via server-side REST credentials
 
 ## Local Setup
@@ -22,45 +24,30 @@ npm install
 npm run dev
 ```
 
-Local Vite dev runs the frontend only. Use Vercel local dev if you need to exercise `/api/early-access` as a route:
+Local Vite dev runs the frontend only. Use Vercel local dev if you need to exercise serverless API routes:
 
 ```bash
 vercel dev
 ```
 
+## App CTA Configuration
+
+The primary CTA reads `VITE_APP_URL` at build time.
+
+Expected production value:
+
+```bash
+VITE_APP_URL=https://scubasteverocks-1b9a9.web.app/
+```
+
+Set this to the real Scuba Steve app URL, not the landing page URL. If a custom app domain is introduced later, update `VITE_APP_URL` to that origin or path.
+
 ## Build
 
 ```bash
-npm run lint
 npm run typecheck
 npm run build
 ```
-
-## Email Capture
-
-Endpoint:
-
-```bash
-POST /api/early-access
-```
-
-Stored Firestore collection:
-
-```text
-earlyAccessLeads
-```
-
-Fields:
-
-- `email`
-- `name`
-- `diverLevel`
-- `source=landing-page`
-- `createdAt`
-- `userAgent`
-- `referrer`
-
-Duplicate protection uses a SHA-256 hash of the normalized email address as the Firestore document ID.
 
 ## Business Interest Capture
 
@@ -92,9 +79,29 @@ Fields:
 
 Duplicate protection uses a SHA-256 hash of the normalized email address as the Firestore document ID.
 
+The endpoint includes a hidden honeypot field, required-field validation, optional website URL validation, an 8 KB body-size guard, CORS allowlisting, and generic client-facing error messages.
+
+## Legacy Early Access Endpoint
+
+`/api/early-access` is retained as unused legacy code for old deployments or old links. The current landing page does not render an early-access form and does not call this endpoint.
+
+Stored Firestore collection for legacy submissions:
+
+```text
+earlyAccessLeads
+```
+
 ## Required Environment Variables
 
-Set in Vercel Project Settings. Do not expose these as `VITE_*` variables.
+Set in Vercel Project Settings.
+
+Client build variable:
+
+```bash
+VITE_APP_URL=...
+```
+
+Server-only Firebase credentials. Do not expose these as `VITE_*` variables.
 
 Preferred:
 
@@ -112,18 +119,15 @@ FIREBASE_PRIVATE_KEY=...
 
 ## Vercel Deployment
 
-1. Create a new Vercel project from this repository.
-2. Set the Firebase Admin environment variables above.
-3. Deploy.
-4. Submit the early-access form once and confirm a document appears in `earlyAccessLeads`.
+1. Create or update the Vercel project from this repository.
+2. Set `VITE_APP_URL` to the real Scuba Steve app URL.
+3. Set the Firebase Admin environment variables above.
+4. Deploy.
 5. Submit the business interest form once and confirm a document appears in `businessInterestLeads`.
 
 ## Analytics Events
 
 - `launch_app_click`
-- `early_access_open`
-- `early_access_submit_success`
 - `business_interest_open`
 - `business_interest_submit_success`
-- `article_card_click`
-- `feature_card_click`
+

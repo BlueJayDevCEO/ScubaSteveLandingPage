@@ -20,7 +20,7 @@ export const media = {
   },
   social: {
     ogImage: {
-      src: "https://www.scubasteve.rocks/images/social/scuba-steve-og.png",
+      src: "/images/scuba-steve-og.png",
       alt: "Scuba Steve AI social preview",
       source: "Landing public/images/scuba-steve-og.png, matching ScubaSteveRocks public/images/social/scuba-steve-og.png",
       suggestedUse: "Open Graph and Twitter social preview",
@@ -45,23 +45,23 @@ export const media = {
   },
   product: {
     marineId: {
-      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FID%20marinelife.webp?alt=media&token=5b0eb9cb-85a6-4bdf-bb4c-c651c2185eaf`,
+      src: "/images/marine-id-preview.png",
       alt: "Scuba Steve AI marine life identification app preview for divers",
-      source: "ScubaSteveRocks components/ToolsHubView.tsx",
+      source: "Landing public/images/marine-id-preview.png",
       suggestedUse: "Marine Life ID preview card",
       safeForPublicMarketing: true
     },
     tripPlanner: {
-      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FTrip%20planner.webp?alt=media&token=17861eab-d571-4d4b-89ee-9fd39c36f9b9`,
+      src: "/images/dive-plan-preview.png",
       alt: "Scuba Steve AI dive trip planner app preview for scuba travel planning",
-      source: "ScubaSteveRocks components/ToolsHubView.tsx",
+      source: "Landing public/images/dive-plan-preview.png",
       suggestedUse: "Hero product device and trip planner preview card",
       safeForPublicMarketing: true
     },
     aiChat: {
-      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FSteve.png?alt=media&token=98017731-0889-4eb0-9367-14a953f2255b`,
+      src: "/images/ocean-trips-preview.png",
       alt: "Scuba Steve scuba AI assistant chat preview for dive questions",
-      source: "ScubaSteveRocks components/ToolsHubView.tsx",
+      source: "Landing public/images/ocean-trips-preview.png",
       suggestedUse: "AI chat preview card",
       safeForPublicMarketing: true
     },

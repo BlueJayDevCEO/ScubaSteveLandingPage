@@ -1,136 +1,10 @@
 import crypto from "node:crypto";
+import { firestoreRequest, getFirebaseCredentials, hasFirebaseCredentials, toFirestoreFields } from "./_lib/firebase-rest.js";
+import { isBodyTooLarge, methodNotAllowed, readJsonBody, setCors } from "./_lib/http.js";
+import { EMAIL_PATTERN, isValidOptionalUrl, sanitizeText } from "./_lib/validation.js";
 
-const ALLOWED_ORIGINS = new Set([
-  "https://scuba-steve-landing-page.vercel.app",
-  "https://www.scubasteve.rocks",
-  "https://scubasteve.rocks",
-  "http://localhost:5173",
-  "http://localhost:4173",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:4173"
-]);
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const TOKEN_URL = "https://oauth2.googleapis.com/token";
-const FIRESTORE_SCOPE = "https://www.googleapis.com/auth/datastore";
 const COLLECTION_NAME = "businessInterestLeads";
-
-let cachedAccessToken = null;
-let cachedAccessTokenExpiry = 0;
-
-function setCors(req, res) {
-  const origin = String(req.headers.origin || "");
-  const allowOrigin = ALLOWED_ORIGINS.has(origin) ? origin : "https://scuba-steve-landing-page.vercel.app";
-  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Cache-Control", "no-store");
-  res.setHeader("Vary", "Origin");
-}
-
-function readJsonBody(req) {
-  if (!req.body) return {};
-  if (typeof req.body === "object") return req.body;
-  try {
-    return JSON.parse(req.body);
-  } catch {
-    return {};
-  }
-}
-
-function sanitizeText(value, maxLength = 180) {
-  return String(value || "").trim().slice(0, maxLength);
-}
-
-function getFirebaseCredentials() {
-  if (process.env.ADMIN_CREDENTIALS_JSON) {
-    try {
-      const parsed = JSON.parse(process.env.ADMIN_CREDENTIALS_JSON);
-      return {
-        projectId: parsed.project_id,
-        clientEmail: parsed.client_email,
-        privateKey: parsed.private_key
-      };
-    } catch {
-      return null;
-    }
-  }
-
-  return {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n")
-  };
-}
-
-function base64Url(input) {
-  return Buffer.from(input)
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/g, "");
-}
-
-function createJwt(credentials) {
-  const now = Math.floor(Date.now() / 1000);
-  const header = { alg: "RS256", typ: "JWT" };
-  const claim = {
-    iss: credentials.clientEmail,
-    scope: FIRESTORE_SCOPE,
-    aud: TOKEN_URL,
-    exp: now + 3600,
-    iat: now
-  };
-  const unsigned = `${base64Url(JSON.stringify(header))}.${base64Url(JSON.stringify(claim))}`;
-  const signer = crypto.createSign("RSA-SHA256");
-  signer.update(unsigned);
-  signer.end();
-  return `${unsigned}.${signer.sign(credentials.privateKey, "base64url")}`;
-}
-
-async function getAccessToken(credentials) {
-  if (cachedAccessToken && Date.now() < cachedAccessTokenExpiry - 60_000) {
-    return cachedAccessToken;
-  }
-
-  const response = await fetch(TOKEN_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: createJwt(credentials)
-    })
-  });
-
-  if (!response.ok) {
-    throw new Error("token_exchange_failed");
-  }
-
-  const payload = await response.json();
-  cachedAccessToken = payload.access_token;
-  cachedAccessTokenExpiry = Date.now() + Number(payload.expires_in || 3600) * 1000;
-  return cachedAccessToken;
-}
-
-function toFirestoreFields(lead) {
-  const fields = {};
-  for (const [key, value] of Object.entries(lead)) {
-    fields[key] = value instanceof Date ? { timestampValue: value.toISOString() } : { stringValue: String(value || "") };
-  }
-  return { fields };
-}
-
-async function firestoreRequest(credentials, path, options = {}) {
-  const accessToken = await getAccessToken(credentials);
-  return fetch(`https://firestore.googleapis.com/v1/projects/${credentials.projectId}/databases/(default)/documents/${path}`, {
-    ...options,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-      ...(options.headers || {})
-    }
-  });
-}
+const MAX_BODY_BYTES = 8 * 1024;
 
 export default async function handler(req, res) {
   setCors(req, res);
@@ -140,10 +14,18 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return methodNotAllowed(res);
+  }
+
+  if (isBodyTooLarge(req, MAX_BODY_BYTES)) {
+    return res.status(413).json({ error: "Request body is too large." });
   }
 
   const body = readJsonBody(req);
+  if (body.websiteUrl || body.company || body.url) {
+    return res.status(200).json({ ok: true, spam: true });
+  }
+
   const email = sanitizeText(body.email, 254).toLowerCase();
   const lead = {
     name: sanitizeText(body.name),
@@ -155,12 +37,19 @@ export default async function handler(req, res) {
     message: sanitizeText(body.message, 1000)
   };
 
-  if (!lead.name || !EMAIL_PATTERN.test(email) || !lead.businessName || !lead.businessType || !lead.country) {
+  if (
+    !lead.name ||
+    !EMAIL_PATTERN.test(email) ||
+    !lead.businessName ||
+    !lead.businessType ||
+    !lead.country ||
+    !isValidOptionalUrl(lead.website)
+  ) {
     return res.status(400).json({ error: "Please complete the required business fields." });
   }
 
   const credentials = getFirebaseCredentials();
-  if (!credentials?.projectId || !credentials?.clientEmail || !credentials?.privateKey) {
+  if (!hasFirebaseCredentials(credentials)) {
     return res.status(503).json({ error: "Business interest signup is not configured yet." });
   }
 
@@ -191,7 +80,8 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({ ok: true, duplicate: false });
-  } catch {
+  } catch (error) {
+    console.error("business_interest_failed", error);
     return res.status(500).json({ error: "We could not register your interest right now. Please try again in a moment." });
   }
 }
