@@ -26,8 +26,10 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true, spam: true });
   }
 
+  const visitorType = body.visitorType === "business" ? "business" : "diver";
   const email = sanitizeText(body.email, 254).toLowerCase();
   const lead = {
+    visitorType,
     name: sanitizeText(body.name),
     email,
     businessName: sanitizeText(body.businessName),
@@ -40,12 +42,11 @@ export default async function handler(req, res) {
   if (
     !lead.name ||
     !EMAIL_PATTERN.test(email) ||
-    !lead.businessName ||
-    !lead.businessType ||
     !lead.country ||
+    (visitorType === "business" && (!lead.businessName || !lead.businessType)) ||
     !isValidOptionalUrl(lead.website)
   ) {
-    return res.status(400).json({ error: "Please complete the required business fields." });
+    return res.status(400).json({ error: "Please complete the required signup fields." });
   }
 
   const credentials = getFirebaseCredentials();

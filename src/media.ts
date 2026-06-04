@@ -29,9 +29,9 @@ export const media = {
   },
   hero: {
     background: {
-      src: `${storage}/public%2Fvideo%2FMaldives.webp?alt=media&token=485eb3f9-c78f-4a35-a6f5-57777e4ce742`,
-      alt: "Maldives reef water used as Scuba Steve landing hero background",
-      source: "ScubaSteveRocks components/LoginPage.tsx",
+      src: `${storage}/site%2Fbackgrounds%2Fbg_hero.jpg.jpg?alt=media&token=68d9d400-6396-43b8-bdb2-6b5d37a6c7c1`,
+      alt: "Scuba diver exploring blue water with a dive torch",
+      source: "Firebase Storage site/backgrounds/bg_hero.jpg.jpg",
       suggestedUse: "Hero background image",
       safeForPublicMarketing: true
     },
@@ -45,31 +45,38 @@ export const media = {
   },
   product: {
     marineId: {
-      src: "/images/marine-id-preview.png",
-      alt: "Scuba Steve AI marine life identification app preview for divers",
-      source: "Landing public/images/marine-id-preview.png",
+      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FID%20marinelife.webp?alt=media&token=5b0eb9cb-85a6-4bdf-bb4c-c651c2185eaf`,
+      alt: "Scuba diver photographing reef marine life for identification",
+      source: "Firebase Storage public/video/App layout Media/ID marinelife.webp",
       suggestedUse: "Marine Life ID preview card",
       safeForPublicMarketing: true
     },
     tripPlanner: {
-      src: "/images/dive-plan-preview.png",
-      alt: "Scuba Steve AI dive trip planner app preview for scuba travel planning",
-      source: "Landing public/images/dive-plan-preview.png",
-      suggestedUse: "Hero product device and trip planner preview card",
+      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FSite%20conditions.webp?alt=media&token=fce44e49-39ad-4e02-b77d-1e2786f026df`,
+      alt: "Diver entering the water at sunset while checking dive conditions",
+      source: "Firebase Storage public/video/App layout Media/Site conditions.webp",
+      suggestedUse: "Dive trip planning preview card",
       safeForPublicMarketing: true
     },
     aiChat: {
-      src: "/images/ocean-trips-preview.png",
-      alt: "Scuba Steve scuba AI assistant chat preview for dive questions",
-      source: "Landing public/images/ocean-trips-preview.png",
+      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2Fdive%20topics.webp?alt=media&token=46882956-2f50-4489-b616-e537c82fc469`,
+      alt: "Scuba diver with underwater slate for dive topic questions",
+      source: "Firebase Storage public/video/App layout Media/dive topics.webp",
       suggestedUse: "AI chat preview card",
       safeForPublicMarketing: true
     },
     photoEnhancement: {
-      src: "https://www.scubasteve.rocks/demo-color-after.svg",
-      alt: "Scuba Steve underwater photo enhancement color correction preview",
-      source: "ScubaSteveRocks public/demo-color-after.svg",
+      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2Fcolor%20correct.jpg?alt=media&token=b48bf61b-119d-4189-bdf2-884a1557921e`,
+      alt: "Before and after underwater photo color correction comparison",
+      source: "Firebase Storage public/video/App layout Media/color correct.jpg",
       suggestedUse: "Underwater photo enhancement preview card",
+      safeForPublicMarketing: true
+    },
+    stevePortrait: {
+      src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FSteve.png?alt=media&token=98017731-0889-4eb0-9367-14a953f2255b`,
+      alt: "Scuba Steve founder portrait",
+      source: "Firebase Storage public/video/App layout Media/Steve.png",
+      suggestedUse: "Founder section portrait",
       safeForPublicMarketing: true
     },
     photoEnhancementBefore: {
@@ -142,6 +149,7 @@ export const mediaInventory: LandingMediaAsset[] = [
   media.product.tripPlanner,
   media.product.aiChat,
   media.product.photoEnhancement,
+  media.product.stevePortrait,
   media.product.photoEnhancementBefore,
   media.product.photoEnhancementStorageSample,
   media.product.localMarineIdPreview,

@@ -83,6 +83,7 @@ const faqs = [
 ];
 
 type SubmitState = "idle" | "loading" | "success" | "error";
+type VisitorType = "diver" | "business";
 
 const sectionTrackingEvents = [
   { selector: ".problem-section", eventName: "reached_problem_section", section: "problem" },
@@ -117,6 +118,7 @@ function scrollToId(id: string) {
 export default function App() {
   const [businessState, setBusinessState] = useState<SubmitState>("idle");
   const [businessError, setBusinessError] = useState("");
+  const [visitorType, setVisitorType] = useState<VisitorType>("diver");
   const futureTopicCount = futureNavigationRoutes.length;
   const hasStartedBusinessForm = useRef(false);
 
@@ -178,18 +180,21 @@ export default function App() {
     hasStartedBusinessForm.current = true;
     trackLandingEventOncePerSession("business_form_started", {
       source_section: "business",
-      visitor_type_signal: "business"
+      visitor_type_signal: visitorType
     });
   }
 
   async function submitBusinessInterest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (businessState === "loading") return;
+    const formElement = event.currentTarget;
     setBusinessState("loading");
     setBusinessError("");
 
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formElement);
+    const selectedVisitorType = form.get("visitorType") === "business" ? "business" : "diver";
     const payload = {
+      visitorType: selectedVisitorType,
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
       businessName: String(form.get("businessName") || ""),
@@ -202,8 +207,8 @@ export default function App() {
 
     trackLandingEvent("business_form_submitted", {
       source_section: "business",
-      cta_label: "Request Business Follow-Up",
-      visitor_type_signal: "business",
+      cta_label: selectedVisitorType === "business" ? "Request Business Follow-Up" : "Subscribe for Diver Updates",
+      visitor_type_signal: selectedVisitorType,
       business_type: payload.businessType || "unspecified",
       has_website: payload.website ? "true" : "false",
       has_message: payload.message ? "true" : "false"
@@ -221,7 +226,7 @@ export default function App() {
       if (!response.ok) {
         trackLandingEvent("business_form_error", {
           source_section: "business",
-          visitor_type_signal: "business",
+          visitor_type_signal: selectedVisitorType,
           business_type: payload.businessType || "unspecified",
           error_type: "api_error",
           status_code: String(response.status)
@@ -230,11 +235,11 @@ export default function App() {
         throw new Error("business_signup_failed");
       }
 
-      event.currentTarget.reset();
+      formElement.reset();
       setBusinessState("success");
       trackLandingEvent("business_form_success", {
         source_section: "business",
-        visitor_type_signal: "business",
+        visitor_type_signal: selectedVisitorType,
         business_type: payload.businessType || "unspecified",
         has_website: payload.website ? "true" : "false",
         has_message: payload.message ? "true" : "false"
@@ -245,7 +250,7 @@ export default function App() {
       if (!trackedSubmitError) {
         trackLandingEvent("business_form_error", {
           source_section: "business",
-          visitor_type_signal: "business",
+          visitor_type_signal: selectedVisitorType,
           business_type: payload.businessType || "unspecified",
           error_type: "submit_failure"
         });
@@ -254,6 +259,7 @@ export default function App() {
   }
 
   function openBusinessInterest(sourceSection: string, ctaLabel: string) {
+    setVisitorType("business");
     if (sourceSection === "hero") {
       trackLandingEvent("hero_business_cta_clicked", {
         source_section: sourceSection,
@@ -306,7 +312,7 @@ export default function App() {
         </div>
         <div className="device" aria-label="Scuba Steve trip planner preview">
           <div className="device-top" />
-          <img src={media.product.tripPlanner.src} alt="Scuba Steve AI dive trip planner app preview for scuba destination planning" />
+          <img src={media.product.localDivePlanPreview.src} alt="Scuba Steve AI dive trip planner app preview for scuba destination planning" />
         </div>
       </header>
 
@@ -377,7 +383,7 @@ export default function App() {
       </section>
 
       <section id="about" className="founder-section">
-        <img src={media.brand.oseaLogo.src} alt="OSEA Diver logo for Scuba Steve AI founder Jay Van der Colff" />
+        <img className="founder-portrait" src={media.product.stevePortrait.src} alt="Scuba Steve founder Jay Van der Colff" />
         <div>
           <p className="eyebrow dark-eyebrow">Founder</p>
           <h2>Built from real scuba instruction experience</h2>
@@ -406,10 +412,10 @@ export default function App() {
             <span>Scuba Steve AI helps divers and dive businesses support better questions, clearer planning, and more useful post-dive learning.</span>
           </div>
         </div>
-        <form className="footer-form" onFocusCapture={trackBusinessFormStarted} onSubmit={submitBusinessInterest} aria-label="Business interest form">
-          <h3>Bring Scuba Steve to your dive business</h3>
+        <form className="footer-form" onFocusCapture={trackBusinessFormStarted} onSubmit={submitBusinessInterest} aria-label="Scuba Steve subscription form">
+          <h3>Stay connected with Scuba Steve</h3>
           <p>
-            For dive centres, resorts, liveaboards, instructors, and travel companies that want an AI scuba assistant for guest questions, dive planning, marine-life learning, and pre-trip education.
+            Join as a diver for product updates, or as a dive business to talk about guest education, trip planning, and customer support pilots.
           </p>
           <div className="form-grid">
             <label>
@@ -421,29 +427,46 @@ export default function App() {
               <input name="email" type="email" required disabled={businessState === "loading"} />
             </label>
             <label>
-              Business Name
-              <input name="businessName" type="text" required disabled={businessState === "loading"} />
-            </label>
-            <label>
-              Business Type
-              <select name="businessType" required disabled={businessState === "loading"}>
-                <option value="">Select one</option>
-                <option>Dive Centre</option>
-                <option>Dive Resort</option>
-                <option>Liveaboard</option>
-                <option>Instructor</option>
-                <option>Travel Company</option>
-                <option>Other</option>
+              I am
+              <select
+                name="visitorType"
+                required
+                value={visitorType}
+                disabled={businessState === "loading"}
+                onChange={(event) => setVisitorType(event.currentTarget.value === "business" ? "business" : "diver")}
+              >
+                <option value="diver">A diver</option>
+                <option value="business">A dive business</option>
               </select>
             </label>
             <label>
               Country
               <input name="country" type="text" required disabled={businessState === "loading"} />
             </label>
-            <label>
-              Website
-              <input name="website" type="url" placeholder="Optional" disabled={businessState === "loading"} />
-            </label>
+            {visitorType === "business" && (
+              <>
+                <label>
+                  Business Name
+                  <input name="businessName" type="text" required disabled={businessState === "loading"} />
+                </label>
+                <label>
+                  Business Type
+                  <select name="businessType" required disabled={businessState === "loading"}>
+                    <option value="">Select one</option>
+                    <option>Dive Centre</option>
+                    <option>Dive Resort</option>
+                    <option>Liveaboard</option>
+                    <option>Instructor</option>
+                    <option>Travel Company</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  Website
+                  <input name="website" type="url" placeholder="Optional" disabled={businessState === "loading"} />
+                </label>
+              </>
+            )}
           </div>
           <label className="honeypot-field" aria-hidden="true">
             Website URL
@@ -451,12 +474,16 @@ export default function App() {
           </label>
           <label>
             Message
-            <textarea name="message" placeholder="Optional" disabled={businessState === "loading"} />
+            <textarea name="message" placeholder={visitorType === "business" ? "Optional" : "Optional: what do you want Steve to help with?"} disabled={businessState === "loading"} />
           </label>
           <button type="submit" disabled={businessState === "loading"}>
-            {businessState === "loading" ? "Sending..." : "Request Business Follow-Up"}
+            {businessState === "loading" ? "Sending..." : visitorType === "business" ? "Request Business Follow-Up" : "Subscribe for Diver Updates"}
           </button>
-          {businessState === "success" && <p className="success">Thanks. We'll contact you about a Scuba Steve business pilot.</p>}
+          {businessState === "success" && (
+            <p className="success">
+              {visitorType === "business" ? "Thanks. We'll contact you about a Scuba Steve business pilot." : "Thanks. We'll keep you posted on Scuba Steve updates."}
+            </p>
+          )}
           {businessState === "error" && <p className="error">{businessError}</p>}
         </form>
       </footer>

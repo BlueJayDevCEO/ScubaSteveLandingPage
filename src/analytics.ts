@@ -35,11 +35,15 @@ function markTrackedThisSession(eventName: string) {
 }
 
 export function trackLandingEvent(eventName: string, properties: TrackingProperties = {}) {
-  track(eventName, {
-    ...properties,
-    page_path: getPagePath(),
-    device_type: getDeviceType()
-  });
+  try {
+    track(eventName, {
+      ...properties,
+      page_path: getPagePath(),
+      device_type: getDeviceType()
+    });
+  } catch {
+    // Analytics must never break visitor actions like lead capture.
+  }
 }
 
 export function trackLandingEventOncePerSession(eventName: string, properties: TrackingProperties = {}) {
@@ -47,4 +51,3 @@ export function trackLandingEventOncePerSession(eventName: string, properties: T
   markTrackedThisSession(eventName);
   trackLandingEvent(eventName, properties);
 }
-

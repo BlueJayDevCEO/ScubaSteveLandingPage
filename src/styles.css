@@ -405,6 +405,12 @@ h3 {
   width: 100%;
 }
 
+.founder-section img.founder-portrait {
+  aspect-ratio: 1;
+  object-fit: cover;
+  padding: 0;
+}
+
 .safety-copy {
   border-left: 4px solid #04778c;
   font-weight: 800;
