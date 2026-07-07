@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { firestoreRequest, getFirebaseCredentials, hasFirebaseCredentials, toFirestoreFields } from "./_lib/firebase-rest.js";
 import { methodNotAllowed, readJsonBody, setCors } from "./_lib/http.js";
+import { sendEnquiryNotification } from "./_lib/notify.js";
 import { EMAIL_PATTERN, sanitizeText } from "./_lib/validation.js";
 
 // Legacy-unused endpoint: the current landing page no longer renders an early-access form.
@@ -58,6 +59,12 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       throw new Error("firestore_write_failed");
+    }
+
+    try {
+      await sendEnquiryNotification({ visitorType: "diver", name, email, message: diverLevel, source: "landing-page (early-access)" });
+    } catch (notifyError) {
+      console.error("enquiry_notification_failed", notifyError);
     }
 
     return res.status(200).json({ ok: true, duplicate: false });

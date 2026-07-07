@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { firestoreRequest, getFirebaseCredentials, hasFirebaseCredentials, toFirestoreFields } from "./_lib/firebase-rest.js";
 import { isBodyTooLarge, methodNotAllowed, readJsonBody, setCors } from "./_lib/http.js";
+import { sendEnquiryNotification } from "./_lib/notify.js";
 import { EMAIL_PATTERN, isValidOptionalUrl, sanitizeText } from "./_lib/validation.js";
 
 const COLLECTION_NAME = "businessInterestLeads";
@@ -78,6 +79,14 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       throw new Error("firestore_write_failed");
+    }
+
+    // Email the enquiry to the inbox. Best-effort: the lead is already stored,
+    // so a notification failure must not fail the visitor's submission.
+    try {
+      await sendEnquiryNotification({ ...lead, source: "landing-page" });
+    } catch (notifyError) {
+      console.error("enquiry_notification_failed", notifyError);
     }
 
     return res.status(200).json({ ok: true, duplicate: false });

@@ -72,6 +72,20 @@ export const media = {
       suggestedUse: "Underwater photo enhancement preview card",
       safeForPublicMarketing: true
     },
+    colorFixBefore: {
+      src: "/images/colorfix-before.jpg",
+      alt: "Real underwater reef photo before colour correction — washed out and blue",
+      source: "Derived from Firebase PA310001.JPG, resized/optimized into landing public/images/colorfix-before.jpg",
+      suggestedUse: "Color Fix before/after slider — BEFORE frame",
+      safeForPublicMarketing: true
+    },
+    colorFixAfter: {
+      src: "/images/colorfix-after.jpg",
+      alt: "The same reef photo after underwater colour correction — reds restored, natural colour",
+      source: "PA310001.JPG processed with gray-world white balance + contrast/saturation, landing public/images/colorfix-after.jpg",
+      suggestedUse: "Color Fix before/after slider — AFTER frame",
+      safeForPublicMarketing: true
+    },
     stevePortrait: {
       src: `${storage}/public%2Fvideo%2FApp%20layout%20Media%2FSteve.png?alt=media&token=98017731-0889-4eb0-9367-14a953f2255b`,
       alt: "Scuba Steve founder portrait",
@@ -149,6 +163,8 @@ export const mediaInventory: LandingMediaAsset[] = [
   media.product.tripPlanner,
   media.product.aiChat,
   media.product.photoEnhancement,
+  media.product.colorFixBefore,
+  media.product.colorFixAfter,
   media.product.stevePortrait,
   media.product.photoEnhancementBefore,
   media.product.photoEnhancementStorageSample,
