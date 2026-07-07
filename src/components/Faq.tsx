@@ -28,6 +28,10 @@ export const FAQ_ITEMS = [
   {
     q: "Does Scuba Steve replace dive training or emergency services?",
     a: "No. Scuba Steve supports learning and planning only. It does not replace certified training, dive professionals, local briefings, emergency services, or personal dive judgement."
+  },
+  {
+    q: "Is Scuba Steve free?",
+    a: "Scuba Steve is free to start, with generous daily limits across chat, marine ID, dive planning, site research and refreshers. A Pro subscription lifts those limits for divers who use it heavily."
   }
 ];
 

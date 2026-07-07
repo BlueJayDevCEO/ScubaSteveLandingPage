@@ -25,6 +25,24 @@ const CAPABILITIES = [
   { name: "Knowledge Refresh", text: "Structured refreshers on buoyancy, gas planning, signals and gear before you dive again." }
 ];
 
+const HOW_STEPS = [
+  {
+    n: "01",
+    title: "Ask, or drop in a photo",
+    text: "A trip idea, a fish you can't place, a site you're about to dive, or “what should I refresh?”"
+  },
+  {
+    n: "02",
+    title: "Steve answers in diving context",
+    text: "Structured trip plans, marine ID starting points, site briefs and refreshers — not generic web summaries."
+  },
+  {
+    n: "03",
+    title: "Take it to the water",
+    text: "Save it, refine it, and always follow your certified training and the local briefing on the day."
+  }
+];
+
 const STEVE_IS = [
   "A planning and preparation assistant",
   "A marine life learning companion",
@@ -157,6 +175,25 @@ export function HomePage() {
             </Reveal>
           ))}
         </div>
+      </section>
+
+      {/* 2b. HOW IT WORKS */}
+      <section className="how-section" aria-labelledby="how-heading">
+        <Reveal>
+          <p className="eyebrow">How Steve works</p>
+          <h2 id="how-heading">Three steps, on land or between dives.</h2>
+        </Reveal>
+        <ol className="how-steps">
+          {HOW_STEPS.map((step, index) => (
+            <Reveal as="div" key={step.n} delay={(index % 3) as 0 | 1 | 2} className="how-step">
+              <li>
+                <span className="how-step-n" aria-hidden="true">{step.n}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            </Reveal>
+          ))}
+        </ol>
       </section>
 
       {/* 3. STEVE IN ACTION */}
@@ -349,6 +386,55 @@ export function HomePage() {
         </Reveal>
         <Reveal delay={1}>
           <Faq />
+        </Reveal>
+      </section>
+
+      {/* 9b. PRICING */}
+      <section className="pricing-strip" aria-labelledby="pricing-heading">
+        <Reveal>
+          <p className="eyebrow">Pricing</p>
+          <h2 id="pricing-heading">Free to start.</h2>
+          <p className="section-lede">
+            Scuba Steve is free to use, with generous daily limits. Diving often? Pro lifts the limits across
+            every tool.
+          </p>
+        </Reveal>
+        <div className="pricing-tiers">
+          <Reveal className="pricing-tier">
+            <h3>
+              Free <span className="tier-price">$0</span>
+            </h3>
+            <p>
+              Daily use of chat, marine ID, trip planning, site research and refreshers — enough to really put
+              Steve to work. No card to start.
+            </p>
+          </Reveal>
+          <Reveal delay={1} className="pricing-tier">
+            <h3>
+              Pro <span className="tier-price">Subscription</span>
+            </h3>
+            <p>
+              For frequent divers — higher daily limits across every tool. Upgrade in the app whenever you're
+              ready.
+            </p>
+          </Reveal>
+        </div>
+        <Reveal>
+          <div className="cta-row" style={{ justifyContent: "center", marginTop: 28 }}>
+            <button
+              className="primary-cta primary-cta-strong"
+              onClick={() => {
+                trackLandingEvent("final_cta_clicked", {
+                  source_section: "pricing",
+                  cta_label: "Try Scuba Steve free",
+                  audience: "diver"
+                });
+                launchApp("pricing", "Try Scuba Steve free");
+              }}
+            >
+              Try Scuba Steve free
+            </button>
+          </div>
         </Reveal>
       </section>
 

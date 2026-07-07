@@ -668,6 +668,67 @@ form button:hover {
 }
 .moment:hover .moment-cue { opacity: 1; transform: translateX(0); }
 
+/* ---------- How it works ---------- */
+.how-section {
+  padding: clamp(56px, 8vw, 104px) var(--pad-x);
+  background: var(--depth-30);
+}
+.how-section > * { max-width: var(--container); margin-inline: auto; }
+.how-steps {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.how-step {
+  border: 1px solid var(--line-dark);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 24px;
+}
+.how-step li { list-style: none; display: block; }
+.how-step-n {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--depth-40);
+  background: var(--accent-air);
+  border-radius: var(--r-pill);
+  padding: 3px 10px;
+  display: inline-block;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.how-step h3 { color: #fff; }
+.how-step p { color: var(--ink-onraft-soft); margin: 0; }
+
+/* ---------- Pricing strip ---------- */
+.pricing-strip {
+  padding: clamp(40px, 6vw, 72px) var(--pad-x);
+  background: var(--depth-20);
+  text-align: center;
+}
+.pricing-strip > * { max-width: 720px; margin-inline: auto; }
+.pricing-strip h2 { color: #fff; }
+.pricing-strip .section-lede { color: var(--ink-onraft-soft); margin-inline: auto; }
+.pricing-tiers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 26px;
+  text-align: left;
+}
+.pricing-tier {
+  border: 1px solid var(--line-dark);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 22px;
+}
+.pricing-tier h3 { color: #fff; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.pricing-tier .tier-price { font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-air); }
+.pricing-tier p { color: var(--ink-onraft-soft); margin: 6px 0 0; font-size: 0.95rem; }
+
 /* ---------- Demo section ---------- */
 .demo-section {
   background: var(--depth-20);
@@ -1487,6 +1548,8 @@ textarea:focus {
 /* ---------- Responsive ---------- */
 @media (min-width: 720px) {
   .cta-row { flex-direction: row; flex-wrap: wrap; }
+  .how-steps { grid-template-columns: repeat(3, 1fr); }
+  .pricing-tiers { grid-template-columns: repeat(2, 1fr); }
   .moments-grid { grid-template-columns: repeat(2, 1fr); }
   .capabilities-list { grid-template-columns: repeat(2, 1fr); column-gap: 32px; }
   .capability:nth-child(2) { border-top: 1px solid var(--line-light); }
