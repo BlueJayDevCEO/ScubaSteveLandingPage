@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Footer } from "./components/Footer";
 import { Nav } from "./components/Nav";
+import { StickyCta } from "./components/StickyCta";
 import { DiveCentresPage } from "./pages/DiveCentresPage";
 import { HomePage } from "./pages/HomePage";
 import { DIVE_CENTRES_PATH, useRoutePath } from "./router";
@@ -14,7 +15,7 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
   [DIVE_CENTRES_PATH]: {
     title: "Dive Centre Pilot — Scuba Steve AI for Dive Shops",
     description:
-      "A pilot programme for selected dive centres: a shop-specific AI assistant configured around your courses, schedules, sites and policies, handing qualified enquiries to your team."
+      "What if Steve knew your dive centre? A pilot for selected dive shops: a Steve configured around your courses, prices, schedules and local sites — answering customer questions and handing qualified enquiries to your team."
   }
 };
 
@@ -37,6 +38,7 @@ export default function App() {
       <Nav />
       {isDiveCentres ? <DiveCentresPage /> : <HomePage />}
       <Footer />
+      {!isDiveCentres && <StickyCta />}
     </div>
   );
 }

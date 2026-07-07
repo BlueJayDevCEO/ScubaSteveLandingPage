@@ -1,5 +1,5 @@
 import { trackLandingEvent } from "../analytics";
-import { APP_URL } from "../config";
+import { APP_URL, buildAppUrl } from "../config";
 import { media } from "../media";
 import { DIVE_CENTRES_PATH, HOME_PATH, Link, useRoutePath } from "../router";
 
@@ -14,7 +14,7 @@ export function Nav() {
       outbound_url_host: new URL(APP_URL, window.location.href).host,
       visitor_type_signal: "diver"
     });
-    window.location.href = APP_URL;
+    window.location.href = buildAppUrl("nav");
   }
 
   return (
@@ -37,7 +37,8 @@ export function Nav() {
           Dive Centres
         </Link>
         <button className="nav-button" onClick={handleTrySteve}>
-          Try Scuba Steve
+          <span className="nav-cta-long">Try Scuba Steve</span>
+          <span className="nav-cta-short">Try Steve</span>
         </button>
       </div>
     </nav>

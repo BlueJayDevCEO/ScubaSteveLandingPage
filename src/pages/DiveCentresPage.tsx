@@ -2,7 +2,31 @@ import { useEffect } from "react";
 import { trackLandingEventOncePerSession } from "../analytics";
 import { PilotForm } from "../components/PilotForm";
 import { Reveal } from "../components/Reveal";
+import { ShopConversation } from "../components/ShopConversation";
 import { media } from "../media";
+
+const OWNER_FAQ = [
+  {
+    q: "Where does Steve get its answers?",
+    a: "Only from the information you approve — your courses, prices, schedules, sites and policies — plus Steve's general diving context. It does not invent shop-specific details."
+  },
+  {
+    q: "What if it doesn't know something?",
+    a: "It says so plainly and hands the customer off to your team through your configured contact path, rather than guessing."
+  },
+  {
+    q: "How much effort is setup?",
+    a: "You provide the shop information; we configure your Steve around it. There's nothing to install or code on your side."
+  },
+  {
+    q: "What does the pilot cost?",
+    a: "Pilot terms are discussed personally with each shop — tell us about your business and we'll talk specifics by email."
+  },
+  {
+    q: "Can we review it before customers see it?",
+    a: "Yes. Reviewing how your Steve answers is a required step before anything goes live — that's step three of the pilot."
+  }
+];
 
 const SHOP_KNOWLEDGE = [
   "Courses, prerequisites and pricing",
@@ -60,6 +84,9 @@ const PILOT_STEPS = [
 
 export function DiveCentresPage() {
   useEffect(() => {
+    trackLandingEventOncePerSession("dive_centre_page_viewed", {
+      source_section: "dive_centres_page"
+    });
     trackLandingEventOncePerSession("dive_centre_section_viewed", {
       source_section: "dive_centres_page"
     });
@@ -74,7 +101,7 @@ export function DiveCentresPage() {
       {/* B2B hero */}
       <header className="b2b-hero" aria-labelledby="b2b-hero-heading">
         <div className="b2b-hero-media" aria-hidden="true">
-          <img src={media.backgrounds.wreck.src} alt="" fetchPriority="high" decoding="async" />
+          <img src={media.backgrounds.wreck.src} alt="" {...{ fetchpriority: "high" }} decoding="async" />
         </div>
         <div className="b2b-hero-content">
           <p className="eyebrow b2b-eyebrow">Dive Centre Pilot Programme</p>
@@ -114,7 +141,7 @@ export function DiveCentresPage() {
       </section>
 
       {/* What Dive Shop Steve is */}
-      <section className="b2b-what" aria-labelledby="b2b-what-heading">
+      <section id="example" className="b2b-what" aria-labelledby="b2b-what-heading">
         <div className="b2b-what-grid">
           <Reveal className="b2b-what-content">
             <p className="eyebrow dark-eyebrow">The pilot concept</p>
@@ -143,10 +170,13 @@ export function DiveCentresPage() {
             </ul>
           </Reveal>
         </div>
+        <Reveal>
+          <ShopConversation />
+        </Reveal>
       </section>
 
       {/* Customer journey */}
-      <section className="b2b-journey" aria-labelledby="b2b-journey-heading">
+      <section id="how-it-works" className="b2b-journey" aria-labelledby="b2b-journey-heading">
         <Reveal>
           <p className="eyebrow b2b-eyebrow">How an enquiry flows</p>
           <h2 id="b2b-journey-heading">From question to qualified enquiry.</h2>
@@ -197,7 +227,7 @@ export function DiveCentresPage() {
           ))}
         </div>
 
-        <div className="pilot-scope-grid">
+        <div id="scope" className="pilot-scope-grid">
           <Reveal className="pilot-scope">
             <h3>In the pilot</h3>
             <ul className="b2b-checklist">
@@ -221,6 +251,24 @@ export function DiveCentresPage() {
         </div>
       </section>
 
+      {/* Shop-owner FAQ */}
+      <section className="b2b-pilot" aria-labelledby="b2b-owner-faq-heading">
+        <Reveal>
+          <p className="eyebrow dark-eyebrow">Questions dive-centre owners ask</p>
+          <h2 id="b2b-owner-faq-heading">Before you apply.</h2>
+        </Reveal>
+        <Reveal delay={1} className="b2b-owner-faq">
+          <div className="faq-list">
+            {OWNER_FAQ.map((item) => (
+              <details key={item.q}>
+                <summary>{item.q}</summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
       {/* Application */}
       <section id="apply" className="b2b-apply" aria-labelledby="b2b-apply-heading">
         <Reveal>
@@ -233,6 +281,12 @@ export function DiveCentresPage() {
         </Reveal>
         <Reveal delay={1}>
           <PilotForm />
+        </Reveal>
+        <Reveal delay={1}>
+          <p className="b2b-reply-note">
+            Prefer email? Reply directly to the message that sent you here, or write to{" "}
+            <a href="mailto:scubasteverocksai@gmail.com">scubasteverocksai@gmail.com</a>.
+          </p>
         </Reveal>
       </section>
     </main>

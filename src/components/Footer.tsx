@@ -17,6 +17,10 @@ export function Footer() {
   function handleFormStarted() {
     if (hasStarted.current) return;
     hasStarted.current = true;
+    trackLandingEventOncePerSession("diver_updates_started", {
+      source_section: "footer"
+    });
+    // Legacy name kept dual-fired so historical dashboards keep working.
     trackLandingEventOncePerSession("business_form_started", {
       source_section: "footer",
       visitor_type_signal: "diver"
@@ -39,6 +43,10 @@ export function Footer() {
       websiteUrl: String(form.get("websiteUrl") || "")
     };
 
+    trackLandingEvent("diver_updates_submitted", {
+      source_section: "footer",
+      cta_label: "Get dive updates"
+    });
     trackLandingEvent("business_form_submitted", {
       source_section: "footer",
       cta_label: "Get dive updates",
@@ -54,6 +62,7 @@ export function Footer() {
       if (!response.ok) throw new Error("diver_signup_failed");
       formElement.reset();
       setState("success");
+      trackLandingEvent("diver_updates_success", { source_section: "footer" });
       trackLandingEvent("business_form_success", {
         source_section: "footer",
         visitor_type_signal: "diver"

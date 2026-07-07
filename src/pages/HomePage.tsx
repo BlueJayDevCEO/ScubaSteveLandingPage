@@ -1,55 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
+import { BeforeAfterSlider } from "../components/BeforeAfterSlider";
 import { DemoShowcase } from "../components/DemoShowcase";
+import { Faq } from "../components/Faq";
+import { HeroDemo } from "../components/HeroDemo";
 import { Reveal } from "../components/Reveal";
-import { APP_URL } from "../config";
+import { APP_URL, buildAppUrl } from "../config";
 import { media } from "../media";
 import { DIVE_CENTRES_PATH, Link } from "../router";
 
 const MOMENTS = [
-  {
-    title: "Booked a trip?",
-    text: "Turn a destination idea into an itinerary, operator questions and a packing list."
-  },
-  {
-    title: "Saw something amazing?",
-    text: "Get a marine life identification starting point from your dive photo."
-  },
-  {
-    title: "Heading to a new site?",
-    text: "Know the conditions, entries and highlights before you giant-stride in."
-  },
-  {
-    title: "Been dry for months?",
-    text: "Refresh skills and theory before you're back in the water."
-  }
+  { demo: "trip-planner", title: "Booked a trip?", text: "Turn a destination idea into an itinerary, operator questions and a packing list." },
+  { demo: "marine-id", title: "Saw something amazing?", text: "Get a marine life identification starting point from your dive photo." },
+  { demo: "dive-sites", title: "Heading to a new site?", text: "Know the conditions, entries and highlights before you giant-stride in." },
+  { demo: "refresh", title: "Been dry for months?", text: "Refresh skills and theory before you're back in the water." }
 ];
 
 const CAPABILITIES = [
-  {
-    name: "Chat with Steve",
-    text: "Plain-language diving questions, answered with diving context — not generic web summaries."
-  },
-  {
-    name: "Dive Trip Planner",
-    text: "Destination shapes, day-by-day structure, operator questions and logistics worth checking."
-  },
-  {
-    name: "Marine ID",
-    text: "Photo-based species identification starting points with habitat and behaviour context."
-  },
-  {
-    name: "Dive Site Research",
-    text: "Conditions, depth ranges, entries and what a site is actually known for."
-  },
-  {
-    name: "Photo Color Fix",
-    text: "One-tap underwater colour correction that brings the reds back to your dive photos."
-  },
-  {
-    name: "Knowledge Refresh",
-    text: "Structured refreshers on buoyancy, gas planning, signals and gear before you dive again."
-  }
+  { name: "Chat with Steve", text: "Plain-language diving questions, answered with diving context — not generic web summaries." },
+  { name: "Dive Trip Planner", text: "Destination shapes, day-by-day structure, operator questions and logistics worth checking." },
+  { name: "Marine ID", text: "Photo-based species identification starting points with habitat and behaviour context." },
+  { name: "Dive Site Research", text: "Conditions, depth ranges, entries and what a site is actually known for." },
+  { name: "Photo Color Fix", text: "One-tap underwater colour correction that brings the reds back to your dive photos." },
+  { name: "Knowledge Refresh", text: "Structured refreshers on buoyancy, gas planning, signals and gear before you dive again." }
 ];
 
 const STEVE_IS = [
@@ -81,10 +54,12 @@ function launchApp(sourceSection: string, ctaLabel: string, extra: Record<string
     visitor_type_signal: "diver",
     ...extra
   });
-  window.location.href = APP_URL;
+  window.location.href = buildAppUrl(sourceSection);
 }
 
 export function HomePage() {
+  const [demoTab, setDemoTab] = useState("trip-planner");
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -108,18 +83,19 @@ export function HomePage() {
   }, []);
 
   function handleHeroTry() {
-    trackLandingEvent("hero_try_steve_clicked", {
-      source_section: "hero",
-      cta_label: "Try Scuba Steve"
-    });
+    trackLandingEvent("hero_try_steve_clicked", { source_section: "hero", cta_label: "Try Scuba Steve" });
     launchApp("hero", "Try Scuba Steve");
   }
 
   function handleHeroCapabilities() {
-    trackLandingEvent("hero_capabilities_clicked", {
-      source_section: "hero",
-      cta_label: "See what Steve can do"
-    });
+    trackLandingEvent("hero_capabilities_clicked", { source_section: "hero", cta_label: "See Steve in action" });
+    document.getElementById("demo")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function openMomentDemo(demo: string) {
+    setDemoTab(demo);
+    trackLandingEvent("feature_selected", { source_section: "moments", feature: demo });
+    trackLandingEvent("product_demo_started", { demo_id: demo, source_section: "moments" });
     document.getElementById("demo")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -128,7 +104,10 @@ export function HomePage() {
       {/* 1. HERO */}
       <header className="hero" aria-labelledby="hero-heading">
         <div className="hero-media" aria-hidden="true">
-          <img src={media.hero.background.src} alt="" fetchPriority="high" decoding="async" />
+          <img src={media.hero.background.src} alt="" {...{ fetchpriority: "high" }} decoding="async" />
+        </div>
+        <div className="hero-bubbles" aria-hidden="true">
+          <span /><span /><span /><span /><span /><span />
         </div>
         <div className="hero-content">
           <p className="eyebrow">Built for divers, not for everything</p>
@@ -138,29 +117,23 @@ export function HomePage() {
             <span className="hero-accent">Before, between and after dives.</span>
           </h1>
           <p className="subheadline">
-            Scuba Steve is an AI assistant built specifically around diving — plan trips, identify marine
-            life, research dive sites and refresh your skills, all in one place.
+            Plan trips, identify marine life, research dive sites and refresh your skills — with an assistant
+            built only for diving.
           </p>
           <div className="cta-row hero-actions">
             <button className="primary-cta primary-cta-strong" onClick={handleHeroTry}>
               Try Scuba Steve
             </button>
             <button className="secondary-cta" onClick={handleHeroCapabilities}>
-              See what Steve can do
+              See Steve in action
             </button>
           </div>
           <p className="hero-microcopy">
-            Free to start. Planning and learning support — never a replacement for training or local briefings.
+            Free to start. A planning and learning buddy — never a replacement for training or local briefings.
           </p>
         </div>
         <div className="hero-visual">
-          <div className="hero-steve-frame">
-            <img src={media.product.stevePortrait.src} alt="Steve, the Scuba Steve AI dive buddy" />
-          </div>
-          <div className="hero-chat-chip" aria-hidden="true">
-            <span className="hero-chat-q">“What did I just see at 18 metres?”</span>
-            <span className="hero-chat-a">Send me the photo — let's find out.</span>
-          </div>
+          <HeroDemo />
         </div>
       </header>
 
@@ -175,26 +148,66 @@ export function HomePage() {
         </Reveal>
         <div className="moments-grid">
           {MOMENTS.map((moment, index) => (
-            <Reveal key={moment.title} delay={(index % 4) as 0 | 1 | 2 | 3} className="moment">
-              <h3>{moment.title}</h3>
-              <p>{moment.text}</p>
+            <Reveal key={moment.title} delay={(index % 4) as 0 | 1 | 2 | 3}>
+              <button type="button" className="moment" onClick={() => openMomentDemo(moment.demo)}>
+                <h3>{moment.title}</h3>
+                <p>{moment.text}</p>
+                <span className="moment-cue" aria-hidden="true">See it in action →</span>
+              </button>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* 3. PRODUCT EXPERIENCE */}
+      {/* 3. STEVE IN ACTION */}
       <section id="demo" className="demo-section" aria-labelledby="demo-heading">
         <Reveal>
           <p className="eyebrow">Steve in action</p>
           <h2 id="demo-heading">Ask like a diver. Get answers like a dive buddy.</h2>
         </Reveal>
         <Reveal delay={1}>
-          <DemoShowcase />
+          <DemoShowcase activeId={demoTab} onSelect={setDemoTab} />
         </Reveal>
       </section>
 
-      {/* 4. CORE CAPABILITIES */}
+      {/* 4. COLOR FIX */}
+      <section className="colorfix-section" aria-labelledby="colorfix-heading">
+        <div className="colorfix-inner">
+          <Reveal>
+            <p className="eyebrow">One tap, real photo</p>
+            <h2 id="colorfix-heading">Bring the reds back.</h2>
+            <p className="section-lede" style={{ marginInline: "auto" }}>
+              Underwater, water eats the warm colours first. This is a real photo — drag to see Steve's
+              colour correction.
+            </p>
+          </Reveal>
+          <Reveal delay={1}>
+            <BeforeAfterSlider
+              beforeSrc={media.product.photoEnhancementStorageSample.src}
+              afterSrc={media.product.photoEnhancement.src}
+              beforeAlt="Underwater photo before colour correction — washed out and blue"
+              afterAlt="The same underwater photo after Scuba Steve colour correction — natural colour restored"
+            />
+          </Reveal>
+          <Reveal delay={2}>
+            <a
+              className="colorfix-link"
+              href={buildAppUrl("color_fix")}
+              onClick={() =>
+                trackLandingEvent("open_scuba_steve_clicked", {
+                  source_section: "color_fix",
+                  cta_label: "Fix one of yours",
+                  visitor_type_signal: "diver"
+                })
+              }
+            >
+              Fix one of yours → Try Scuba Steve
+            </a>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 5. CAPABILITIES */}
       <section className="capabilities-section" aria-labelledby="capabilities-heading">
         <div className="capabilities-intro">
           <Reveal>
@@ -206,8 +219,8 @@ export function HomePage() {
           </Reveal>
           <Reveal delay={1} className="capabilities-visual">
             <img
-              src={media.product.photoEnhancement.src}
-              alt="Before and after underwater photo colour correction in Scuba Steve"
+              src={media.product.marineId.src}
+              alt="Diver photographing reef marine life for identification in Scuba Steve"
               loading="lazy"
               decoding="async"
             />
@@ -223,7 +236,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* 5. WHY DIVING-SPECIFIC */}
+      {/* 6. WHY DIVING-SPECIFIC */}
       <section className="why-section" aria-labelledby="why-heading">
         <div className="why-media" aria-hidden="true">
           <img src={media.backgrounds.coralGarden.src} alt="" loading="lazy" decoding="async" />
@@ -257,10 +270,10 @@ export function HomePage() {
         </Reveal>
       </section>
 
-      {/* 6. SAFETY AND TRUST */}
+      {/* 7. TRUST & FOUNDER */}
       <section className="trust-section" aria-labelledby="trust-heading">
         <Reveal>
-          <p className="eyebrow dark-eyebrow">Where Steve fits</p>
+          <p className="eyebrow">Where Steve fits</p>
           <h2 id="trust-heading">A dive buddy, not a dive professional.</h2>
         </Reveal>
         <div className="trust-columns">
@@ -281,9 +294,29 @@ export function HomePage() {
             </ul>
           </Reveal>
         </div>
+        <Reveal className="founder-strip">
+          <p className="founder-name">Built by a diver, for divers</p>
+          <p>
+            Scuba Steve is built by Jay Van der Colff, a diving instructor and founder of OSEA Diver. Steve
+            exists because the questions divers ask don't stop when the dive ends.
+          </p>
+          <a
+            className="founder-challenge"
+            href={buildAppUrl("trust")}
+            onClick={() =>
+              trackLandingEvent("open_scuba_steve_clicked", {
+                source_section: "trust",
+                cta_label: "Ask Steve something hard",
+                visitor_type_signal: "diver"
+              })
+            }
+          >
+            Don't take our word for it — ask Steve something hard from your own diving →
+          </a>
+        </Reveal>
       </section>
 
-      {/* 7. DIVE CENTRE TEASER */}
+      {/* 8. DIVE CENTRE TEASER */}
       <section id="dive-centres-teaser" className="b2b-teaser" aria-labelledby="b2b-heading">
         <Reveal className="b2b-teaser-content">
           <p className="eyebrow b2b-eyebrow">For dive centres — pilot programme</p>
@@ -308,7 +341,18 @@ export function HomePage() {
         </Reveal>
       </section>
 
-      {/* 8. FINAL CTA */}
+      {/* 9. FAQ */}
+      <section id="faq" className="faq-section" aria-labelledby="faq-heading">
+        <Reveal>
+          <p className="eyebrow dark-eyebrow">Common questions</p>
+          <h2 id="faq-heading">Straight answers about what Steve does.</h2>
+        </Reveal>
+        <Reveal delay={1}>
+          <Faq />
+        </Reveal>
+      </section>
+
+      {/* 10. FINAL CTA */}
       <section id="final-cta" className="final-cta" aria-labelledby="final-heading">
         <Reveal>
           <h2 id="final-heading">Your next dive starts with a question.</h2>
@@ -330,6 +374,7 @@ export function HomePage() {
             >
               Try Scuba Steve
             </button>
+            <p className="final-reassure">Free to start. No card.</p>
           </Reveal>
           <Reveal delay={1} className="final-panel final-panel-business">
             <h3>Dive centres</h3>
