@@ -177,16 +177,16 @@ export function HomePage() {
             <p className="eyebrow">One tap, real photo</p>
             <h2 id="colorfix-heading">Bring the reds back.</h2>
             <p className="section-lede" style={{ marginInline: "auto" }}>
-              Underwater, water eats the warm colours first. This is a real photo — drag to see Steve's
-              colour correction.
+              Underwater, water eats the warm colours first. Drag across this real dive photo to see
+              underwater colour correction bring them back.
             </p>
           </Reveal>
           <Reveal delay={1}>
             <BeforeAfterSlider
               beforeSrc={media.product.photoEnhancementStorageSample.src}
-              afterSrc={media.product.photoEnhancement.src}
-              beforeAlt="Underwater photo before colour correction — washed out and blue"
-              afterAlt="The same underwater photo after Scuba Steve colour correction — natural colour restored"
+              afterSrc={media.product.photoEnhancementStorageSample.src}
+              beforeAlt="Real underwater reef photo before colour correction — washed out and blue"
+              afterAlt="The same reef photo with underwater colour correction — reds and natural colour restored"
             />
           </Reveal>
           <Reveal delay={2}>

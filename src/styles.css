@@ -938,7 +938,10 @@ form button:hover {
   object-fit: cover;
   pointer-events: none;
 }
-.ba-after { clip-path: inset(0 0 0 var(--split, 35%)); }
+.ba-after {
+  clip-path: inset(0 0 0 var(--split, 35%));
+  filter: url(#underwater-fix) saturate(1.12) contrast(1.05) brightness(1.04);
+}
 .ba-divider {
   position: absolute;
   top: 0;

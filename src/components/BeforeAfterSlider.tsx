@@ -75,6 +75,22 @@ export function BeforeAfterSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt }: 
       onPointerMove={onPointerMove}
       onKeyDown={onKeyDown}
     >
+      {/*
+        Underwater colour-correction filter: restores the attenuated red channel
+        and reduces the blue cast the way underwater white-balance correction
+        does. Applied to the "after" layer so before/after is the SAME real photo.
+      */}
+      <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
+        <filter id="underwater-fix" colorInterpolationFilters="sRGB">
+          <feColorMatrix
+            type="matrix"
+            values="1.5 0.15 0.06 0 0
+                    0.03 1.16 0.03 0 0
+                    0.02 0.05 0.72 0 0
+                    0 0 0 1 0"
+          />
+        </filter>
+      </svg>
       <img className="ba-before" src={beforeSrc} alt={beforeAlt} loading="lazy" decoding="async" />
       <img className="ba-after" src={afterSrc} alt={afterAlt} loading="lazy" decoding="async" />
       <span className="ba-label ba-label-before" aria-hidden="true">Before</span>
