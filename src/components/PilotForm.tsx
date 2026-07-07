@@ -1,18 +1,17 @@
 import { FormEvent, useRef, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
+import { pilotMailto } from "../enquiry";
 
-type SubmitState = "idle" | "loading" | "success" | "error";
+type SubmitState = "idle" | "sent";
 
 /**
- * Dive-centre pilot application. Posts to the existing /api/business-interest
- * endpoint with visitorType=business — same validation, honeypot, and
- * Firestore lead storage as before. Legacy business_form_* events are kept
- * alongside the new dive_centre_form_* events so historical dashboards keep
- * working.
+ * Dive-centre pilot application. On submit it composes the application as an
+ * email from the applicant's own mailbox (mailto) to the enquiry inbox — sent
+ * from their mailbox, no backend needed. A silent best-effort POST also stores
+ * the lead in Firestore when the backend is configured.
  */
 export function PilotForm() {
   const [state, setState] = useState<SubmitState>("idle");
-  const [errorMessage, setErrorMessage] = useState("");
   const hasStarted = useRef(false);
 
   function handleFormStarted() {
@@ -27,69 +26,46 @@ export function PilotForm() {
     });
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (state === "loading") return;
-    const formElement = event.currentTarget;
-    setState("loading");
-    setErrorMessage("");
+    const form = new FormData(event.currentTarget);
+    if (form.get("websiteUrl")) return; // honeypot
 
-    const form = new FormData(formElement);
-    const payload = {
-      visitorType: "business",
+    const fields = {
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
       businessName: String(form.get("businessName") || ""),
       businessType: String(form.get("businessType") || ""),
       country: String(form.get("country") || ""),
       website: String(form.get("website") || ""),
-      message: String(form.get("message") || ""),
-      websiteUrl: String(form.get("websiteUrl") || "")
+      message: String(form.get("message") || "")
     };
 
     trackLandingEvent("dive_centre_form_submitted", {
       source_section: "pilot_form",
-      business_type: payload.businessType || "unspecified",
-      has_website: payload.website ? "true" : "false",
-      has_message: payload.message ? "true" : "false"
+      business_type: fields.businessType || "unspecified",
+      has_website: fields.website ? "true" : "false",
+      has_message: fields.message ? "true" : "false"
     });
     trackLandingEvent("business_form_submitted", {
       source_section: "pilot_form",
       cta_label: "Apply for the pilot",
       visitor_type_signal: "business",
-      business_type: payload.businessType || "unspecified",
-      has_website: payload.website ? "true" : "false",
-      has_message: payload.message ? "true" : "false"
+      business_type: fields.businessType || "unspecified",
+      has_website: fields.website ? "true" : "false",
+      has_message: fields.message ? "true" : "false"
     });
 
-    try {
-      const response = await fetch("/api/business-interest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+    // Silent best-effort capture (only if backend configured); never blocks the email.
+    fetch("/api/business-interest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visitorType: "business", ...fields, websiteUrl: "" })
+    }).catch(() => {});
 
-      if (!response.ok) {
-        trackLandingEvent("business_form_error", {
-          source_section: "pilot_form",
-          visitor_type_signal: "business",
-          error_type: "api_error",
-          status_code: String(response.status)
-        });
-        throw new Error("pilot_application_failed");
-      }
-
-      formElement.reset();
-      setState("success");
-      trackLandingEvent("business_form_success", {
-        source_section: "pilot_form",
-        visitor_type_signal: "business",
-        business_type: payload.businessType || "unspecified"
-      });
-    } catch {
-      setState("error");
-      setErrorMessage("We could not send your application right now. Please try again in a moment.");
-    }
+    // Primary: open the applicant's mailbox with the application ready to send.
+    window.location.href = pilotMailto(fields);
+    setState("sent");
   }
 
   return (
@@ -102,19 +78,19 @@ export function PilotForm() {
       <div className="form-grid">
         <label>
           Your name
-          <input name="name" type="text" autoComplete="name" required disabled={state === "loading"} />
+          <input name="name" type="text" autoComplete="name" required />
         </label>
         <label>
           Work email
-          <input name="email" type="email" autoComplete="email" required disabled={state === "loading"} />
+          <input name="email" type="email" autoComplete="email" required />
         </label>
         <label>
           Business name
-          <input name="businessName" type="text" autoComplete="organization" required disabled={state === "loading"} />
+          <input name="businessName" type="text" autoComplete="organization" required />
         </label>
         <label>
           Business type
-          <select name="businessType" required disabled={state === "loading"} defaultValue="">
+          <select name="businessType" required defaultValue="">
             <option value="" disabled>
               Select one
             </option>
@@ -128,36 +104,31 @@ export function PilotForm() {
         </label>
         <label>
           Country
-          <input name="country" type="text" autoComplete="country-name" required disabled={state === "loading"} />
+          <input name="country" type="text" autoComplete="country-name" required />
         </label>
         <label>
           Website
-          <input name="website" type="url" placeholder="Optional" disabled={state === "loading"} />
+          <input name="website" type="url" placeholder="Optional" />
         </label>
       </div>
       <label className="honeypot-field" aria-hidden="true">
         Website URL
-        <input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" disabled={state === "loading"} />
+        <input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" />
       </label>
       <label>
         Tell us about your shop
         <textarea
           name="message"
           placeholder="Optional: location, typical customers, and the questions your team answers most often."
-          disabled={state === "loading"}
         />
       </label>
-      <button type="submit" className="primary-cta pilot-submit" disabled={state === "loading"}>
-        {state === "loading" ? "Sending application..." : "Apply for the pilot"}
+      <button type="submit" className="primary-cta pilot-submit">
+        Apply for the pilot
       </button>
-      {state === "success" && (
+      <p className="form-hint">Opens your email app with your application ready to send from your mailbox.</p>
+      {state === "sent" && (
         <p className="success" role="status">
-          Thanks — your application is in. We review pilot applications personally and will reply by email.
-        </p>
-      )}
-      {state === "error" && (
-        <p className="error" role="alert">
-          {errorMessage}
+          Your email app should open with your application — just hit send. We reply personally by email.
         </p>
       )}
     </form>

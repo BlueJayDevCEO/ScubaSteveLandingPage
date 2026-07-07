@@ -1,19 +1,20 @@
 import { FormEvent, useRef, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
-import { enquiryMailto } from "../enquiry";
+import { diverUpdatesMailto, enquiryMailto } from "../enquiry";
 import { media } from "../media";
 import { EnquiryActions } from "./EnquiryActions";
 import { DIVE_CENTRES_PATH, Link } from "../router";
 
-type SubmitState = "idle" | "loading" | "success" | "error";
+type SubmitState = "idle" | "sent";
 
 /**
- * Compact diver-updates signup. Reuses /api/business-interest with
- * visitorType=diver (name, email, country are the API's required fields).
+ * Diver-updates signup. On submit it composes the signup as an email from the
+ * visitor's own mailbox (mailto) to the enquiry inbox — no backend needed. A
+ * silent best-effort POST also stores the lead in Firestore when the backend is
+ * configured, but the email always works regardless.
  */
 export function Footer() {
   const [state, setState] = useState<SubmitState>("idle");
-  const [errorMessage, setErrorMessage] = useState("");
   const hasStarted = useRef(false);
 
   function handleFormStarted() {
@@ -29,50 +30,37 @@ export function Footer() {
     });
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (state === "loading") return;
-    const formElement = event.currentTarget;
-    setState("loading");
-    setErrorMessage("");
+    const form = new FormData(event.currentTarget);
+    if (form.get("websiteUrl")) return; // honeypot
 
-    const form = new FormData(formElement);
-    const payload = {
-      visitorType: "diver",
+    const fields = {
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
-      country: String(form.get("country") || ""),
-      websiteUrl: String(form.get("websiteUrl") || "")
+      country: String(form.get("country") || "")
     };
 
     trackLandingEvent("diver_updates_submitted", {
       source_section: "footer",
-      cta_label: "Get dive updates"
+      cta_label: "Email dive updates"
     });
     trackLandingEvent("business_form_submitted", {
       source_section: "footer",
-      cta_label: "Get dive updates",
+      cta_label: "Email dive updates",
       visitor_type_signal: "diver"
     });
 
-    try {
-      const response = await fetch("/api/business-interest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error("diver_signup_failed");
-      formElement.reset();
-      setState("success");
-      trackLandingEvent("diver_updates_success", { source_section: "footer" });
-      trackLandingEvent("business_form_success", {
-        source_section: "footer",
-        visitor_type_signal: "diver"
-      });
-    } catch {
-      setState("error");
-      setErrorMessage("We could not sign you up right now. Please try again in a moment.");
-    }
+    // Silent best-effort capture (only if backend configured); never blocks the email.
+    fetch("/api/business-interest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visitorType: "diver", ...fields, websiteUrl: "" })
+    }).catch(() => {});
+
+    // Primary: open the visitor's mailbox with the signup email ready to send.
+    window.location.href = diverUpdatesMailto(fields);
+    setState("sent");
   }
 
   return (
@@ -95,32 +83,26 @@ export function Footer() {
           <div className="footer-form-row">
             <label>
               Name
-              <input name="name" type="text" autoComplete="name" required disabled={state === "loading"} />
+              <input name="name" type="text" autoComplete="name" required />
             </label>
             <label>
               Email
-              <input name="email" type="email" autoComplete="email" required disabled={state === "loading"} />
+              <input name="email" type="email" autoComplete="email" required />
             </label>
             <label>
               Country
-              <input name="country" type="text" autoComplete="country-name" required disabled={state === "loading"} />
+              <input name="country" type="text" autoComplete="country-name" required />
             </label>
           </div>
           <label className="honeypot-field" aria-hidden="true">
             Website URL
-            <input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" disabled={state === "loading"} />
+            <input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" />
           </label>
-          <button type="submit" disabled={state === "loading"}>
-            {state === "loading" ? "Signing up..." : "Get dive updates"}
-          </button>
-          {state === "success" && (
+          <button type="submit">Get dive updates</button>
+          <p className="form-hint">Opens your email app to send from your mailbox — just hit send.</p>
+          {state === "sent" && (
             <p className="success" role="status">
-              Thanks — you're on the list.
-            </p>
-          )}
-          {state === "error" && (
-            <p className="error" role="alert">
-              {errorMessage}
+              Your email app should open — hit send and you're on the list.
             </p>
           )}
         </form>

@@ -1235,14 +1235,6 @@ form button:hover {
   gap: 14px;
 }
 .enquiry-cta { text-decoration: none; }
-.enquiry-gmail {
-  color: var(--accent-air);
-  font-weight: 600;
-  font-size: 0.92rem;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-.enquiry-gmail:hover { border-bottom-color: var(--accent-air); }
 .enquiry-note {
   flex-basis: 100%;
   margin: 4px 0 0;
@@ -1251,6 +1243,13 @@ form button:hover {
   color: var(--ink-onraft-soft);
 }
 .enquiry-note span { color: var(--accent-air); }
+
+.form-hint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-onraft-soft);
+  margin: 2px 0 0;
+}
 
 .footer-meta {
   max-width: var(--container);
