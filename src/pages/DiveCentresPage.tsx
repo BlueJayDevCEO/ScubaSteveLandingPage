@@ -285,7 +285,7 @@ export function DiveCentresPage() {
         <Reveal delay={1}>
           <p className="b2b-reply-note">
             Prefer email? Reply directly to the message that sent you here, or write to{" "}
-            <a href="mailto:scubasteverocksai@gmail.com">scubasteverocksai@gmail.com</a>.
+            <a href="mailto:steve@scubasteve.rocks">steve@scubasteve.rocks</a>.
           </p>
         </Reveal>
       </section>

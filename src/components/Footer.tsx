@@ -131,7 +131,7 @@ export function Footer() {
         </p>
         <nav className="footer-links" aria-label="Footer">
           <Link to={DIVE_CENTRES_PATH}>Dive Centre Pilot</Link>
-          <a href="mailto:scubasteverocksai@gmail.com">Contact</a>
+          <a href="mailto:steve@scubasteve.rocks">Contact</a>
         </nav>
       </div>
     </footer>

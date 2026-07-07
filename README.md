@@ -101,6 +101,26 @@ Client build variable:
 VITE_APP_URL=...
 ```
 
+### Enquiry email notifications
+
+Every form submission (diver signup and dive-centre pilot application) is emailed
+to the enquiry inbox in addition to being stored in Firestore. Contact links across
+the site also point to this address.
+
+Enquiry inbox: `steve@scubasteve.rocks`
+
+```bash
+RESEND_API_KEY=re_...                               # required to actually send
+ENQUIRY_EMAIL=steve@scubasteve.rocks                # optional, this is the default
+ENQUIRY_FROM="Scuba Steve <steve@scubasteve.rocks>" # must be a Resend-verified domain
+```
+
+Create the key at [resend.com](https://resend.com) and verify the `scubasteve.rocks`
+domain so `ENQUIRY_FROM` can send from it. If `RESEND_API_KEY` is unset, email sending
+is skipped and leads still save to Firestore (no errors).
+
+### Firebase credentials
+
 Server-only Firebase credentials. Do not expose these as `VITE_*` variables.
 
 Preferred:
