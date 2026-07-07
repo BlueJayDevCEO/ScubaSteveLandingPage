@@ -1,6 +1,8 @@
 import { FormEvent, useRef, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
+import { enquiryMailto } from "../enquiry";
 import { media } from "../media";
+import { EnquiryActions } from "./EnquiryActions";
 import { DIVE_CENTRES_PATH, Link } from "../router";
 
 type SubmitState = "idle" | "loading" | "success" | "error";
@@ -124,6 +126,12 @@ export function Footer() {
         </form>
       </div>
 
+      <div className="footer-enquiry">
+        <h3>Rather just ask?</h3>
+        <p>Send Steve an enquiry and we'll reply by email — no form to fill in.</p>
+        <EnquiryActions kind="general" section="footer" />
+      </div>
+
       <div className="footer-meta">
         <p className="footer-safety">
           Scuba Steve supports planning, education and information. It does not replace certified training,
@@ -131,7 +139,7 @@ export function Footer() {
         </p>
         <nav className="footer-links" aria-label="Footer">
           <Link to={DIVE_CENTRES_PATH}>Dive Centre Pilot</Link>
-          <a href="mailto:steve@scubasteve.rocks">Contact</a>
+          <a href={enquiryMailto("general")}>Contact</a>
         </nav>
       </div>
     </footer>

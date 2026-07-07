@@ -183,10 +183,10 @@ export function HomePage() {
           </Reveal>
           <Reveal delay={1}>
             <BeforeAfterSlider
-              beforeSrc={media.product.photoEnhancementStorageSample.src}
-              afterSrc={media.product.photoEnhancementStorageSample.src}
-              beforeAlt="Real underwater reef photo before colour correction — washed out and blue"
-              afterAlt="The same reef photo with underwater colour correction — reds and natural colour restored"
+              beforeSrc={media.product.colorFixBefore.src}
+              afterSrc={media.product.colorFixAfter.src}
+              beforeAlt={media.product.colorFixBefore.alt}
+              afterAlt={media.product.colorFixAfter.alt}
             />
           </Reveal>
           <Reveal delay={2}>
