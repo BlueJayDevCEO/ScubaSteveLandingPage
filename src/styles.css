@@ -4,6 +4,29 @@
    Sections map 1:1 to docs/LANDING_PAGE_STRATEGY.md §12–§13.
    ===================================================================== */
 
+/* Brand display face — LEMON MILK, self-hosted (public/fonts). */
+@font-face {
+  font-family: "LEMON MILK";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/LemonMilk-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "LEMON MILK";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/LemonMilk-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: "LEMON MILK";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/LemonMilk-Bold.woff") format("woff");
+}
+
 :root {
   /* Depth scale — the page descends from sunlit surface to abyss */
   --surface-0: #eaf7f9;
@@ -41,7 +64,7 @@
   --pad-x: clamp(18px, 5vw, 72px);
 
   /* Fonts */
-  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-display: "LEMON MILK", "Segoe UI", system-ui, sans-serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
@@ -132,9 +155,9 @@ p {
 h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.3rem, 5.4vw, 4.1rem);
+  line-height: 1.06;
+  letter-spacing: -0.005em;
   margin-bottom: 18px;
   color: #fff;
 }
@@ -142,17 +165,18 @@ h1 {
 h2 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  line-height: 1.12;
+  letter-spacing: 0;
   margin-bottom: 14px;
 }
 
 h3 {
   font-family: var(--font-display);
-  font-weight: 650;
-  font-size: 1.2rem;
-  line-height: 1.2;
+  font-weight: 500;
+  font-size: 1.16rem;
+  line-height: 1.22;
+  letter-spacing: 0.005em;
   margin-bottom: 8px;
 }
 
