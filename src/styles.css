@@ -974,6 +974,24 @@ form button:hover {
 }
 .ba-label-before { left: 12px; }
 .ba-label-after { right: 12px; color: var(--accent-air); }
+.ba-hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  background: rgba(2, 18, 24, 0.72);
+  color: #fff;
+  pointer-events: none;
+}
 .colorfix-link {
   color: var(--accent-air);
   font-weight: 700;
@@ -1509,8 +1527,12 @@ textarea:focus {
 }
 
 @media (max-width: 719px) {
-  .nav-button { font-size: 0.86rem; padding: 10px 16px; min-height: 44px; }
-  .nav-link { padding: 8px 10px; font-size: 0.9rem; }
+  .nav { gap: 8px; padding-inline: 14px; }
+  .nav-button { font-size: 0.82rem; padding: 9px 14px; min-height: 42px; }
+  .nav-links { gap: 4px; }
+  .nav-link { padding: 7px 9px; font-size: 0.82rem; white-space: nowrap; }
+  .brand { font-size: 0.95rem; gap: 8px; }
+  .brand img { height: 30px; width: 30px; }
   .primary-cta,
   .secondary-cta,
   .hero-actions .primary-cta,
@@ -1518,6 +1540,14 @@ textarea:focus {
   .hero { padding-top: 40px; }
   h1 { font-size: clamp(2.4rem, 10vw, 3.2rem); }
 }
+
+/* Very small screens: logo-only brand so nav never crowds. */
+@media (max-width: 400px) {
+  .brand span { display: none; }
+}
+
+/* Keep 'Dive Centres' from wrapping to two lines. */
+.nav-link { white-space: nowrap; }
 
 /* Reduced motion — MANDATORY: disables every animation on the page */
 @media (prefers-reduced-motion: reduce) {

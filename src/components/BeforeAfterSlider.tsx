@@ -79,7 +79,8 @@ export function BeforeAfterSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt }: 
       <img className="ba-before" src={beforeSrc} alt={beforeAlt} loading="lazy" decoding="async" />
       <img className="ba-after" src={afterSrc} alt={afterAlt} loading="lazy" decoding="async" />
       <span className="ba-label ba-label-before" aria-hidden="true">Before</span>
-      <span className="ba-label ba-label-after" aria-hidden="true">Steve</span>
+      <span className="ba-label ba-label-after" aria-hidden="true">After · with Steve</span>
+      <span className="ba-hint" aria-hidden="true">Drag to compare</span>
       <div className="ba-divider" aria-hidden="true">
         <span className="ba-handle">⇔</span>
       </div>
