@@ -196,15 +196,8 @@ p {
   align-items: center;
   gap: 8px;
 }
-.eyebrow::before {
-  content: "//";
-  opacity: 0.6;
-}
 .dark-eyebrow {
   color: var(--depth-10);
-}
-.dark-eyebrow::before {
-  opacity: 0.45;
 }
 .b2b-eyebrow {
   color: var(--accent-signal);
