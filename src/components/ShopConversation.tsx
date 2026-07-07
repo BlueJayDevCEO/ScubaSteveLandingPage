@@ -33,7 +33,7 @@ export function ShopConversation() {
           I'm certified but haven't dived in two years — can I join Saturday's boat?
         </div>
         <div className="shop-msg shop-msg-steve">
-          Welcome back! After two years we ask divers to do a Reef Refresher first — it's a half-day, R850,
+          Welcome back! After two years we ask divers to do a Reef Refresher first — it's a half-day, $49,
           and runs Saturday mornings before the afternoon boat. Do that and you're set for Saturday's 13:00
           departure to our house reef.
           <br />
