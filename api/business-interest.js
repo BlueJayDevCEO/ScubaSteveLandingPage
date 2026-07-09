@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { firestoreRequest, getFirebaseCredentials, hasFirebaseCredentials, toFirestoreFields } from "./_lib/firebase-rest.js";
 import { isBodyTooLarge, methodNotAllowed, readJsonBody, setCors } from "./_lib/http.js";
-import { sendEnquiryNotification } from "./_lib/notify.js";
+import { isEnquiryNotifyConfigured, sendEnquiryNotification } from "./_lib/notify.js";
 import { EMAIL_PATTERN, isValidOptionalUrl, sanitizeText } from "./_lib/validation.js";
 
 const COLLECTION_NAME = "businessInterestLeads";
@@ -51,47 +51,59 @@ export default async function handler(req, res) {
   }
 
   const credentials = getFirebaseCredentials();
-  if (!hasFirebaseCredentials(credentials)) {
-    return res.status(503).json({ error: "Business interest signup is not configured yet." });
+  const hasFirebase = hasFirebaseCredentials(credentials);
+  const hasEmail = isEnquiryNotifyConfigured();
+
+  // The endpoint needs at least one working channel: email (Resend) and/or
+  // Firestore storage. Email is the primary channel for the current setup.
+  if (!hasFirebase && !hasEmail) {
+    return res.status(503).json({ error: "Enquiry delivery is not configured yet." });
   }
 
-  const documentId = crypto.createHash("sha256").update(email).digest("hex");
-  const documentPath = `${COLLECTION_NAME}/${documentId}`;
+  let stored = false;
+  let emailed = false;
 
-  try {
-    const existing = await firestoreRequest(credentials, documentPath);
-    if (existing.ok) {
-      return res.status(200).json({ ok: true, duplicate: true });
+  // 1) Store in Firestore if configured (best-effort — never blocks email).
+  if (hasFirebase) {
+    try {
+      const documentId = crypto.createHash("sha256").update(email).digest("hex");
+      const documentPath = `${COLLECTION_NAME}/${documentId}`;
+      const existing = await firestoreRequest(credentials, documentPath);
+      if (existing.ok) {
+        // Already captured — treat as delivered so the visitor sees success.
+        return res.status(200).json({ ok: true, duplicate: true });
+      }
+      const payload = toFirestoreFields({
+        ...lead,
+        source: "landing-page",
+        createdAt: new Date(),
+        userAgent: sanitizeText(req.headers["user-agent"], 500),
+        referrer: sanitizeText(req.headers.referer || req.headers.referrer, 500)
+      });
+      const response = await firestoreRequest(credentials, documentPath, {
+        method: "PATCH",
+        body: JSON.stringify(payload)
+      });
+      stored = response.ok;
+      if (!stored) console.error("business_interest_store_failed", response.status);
+    } catch (storeError) {
+      console.error("business_interest_store_error", storeError);
     }
+  }
 
-    const payload = toFirestoreFields({
-      ...lead,
-      source: "landing-page",
-      createdAt: new Date(),
-      userAgent: sanitizeText(req.headers["user-agent"], 500),
-      referrer: sanitizeText(req.headers.referer || req.headers.referrer, 500)
-    });
-
-    const response = await firestoreRequest(credentials, documentPath, {
-      method: "PATCH",
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error("firestore_write_failed");
-    }
-
-    // Email the enquiry to the inbox. Best-effort: the lead is already stored,
-    // so a notification failure must not fail the visitor's submission.
+  // 2) Email the enquiry to the inbox via Resend if configured.
+  if (hasEmail) {
     try {
       await sendEnquiryNotification({ ...lead, source: "landing-page" });
+      emailed = true;
     } catch (notifyError) {
       console.error("enquiry_notification_failed", notifyError);
     }
-
-    return res.status(200).json({ ok: true, duplicate: false });
-  } catch (error) {
-    console.error("business_interest_failed", error);
-    return res.status(500).json({ error: "We could not register your interest right now. Please try again in a moment." });
   }
+
+  if (stored || emailed) {
+    return res.status(200).json({ ok: true, duplicate: false, stored, emailed });
+  }
+
+  return res.status(500).json({ error: "We could not send your enquiry right now. Please try again in a moment." });
 }

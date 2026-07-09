@@ -446,7 +446,7 @@ export function HomePage() {
         <div className="final-split">
           <Reveal className="final-panel final-panel-diver">
             <h3>Divers</h3>
-            <p>Plan, identify, research and refresh — free to start.</p>
+            <p>Plan, identify, research and refresh — all in one place.</p>
             <button
               className="primary-cta primary-cta-strong"
               onClick={() => {
@@ -460,7 +460,7 @@ export function HomePage() {
             >
               Try Scuba Steve
             </button>
-            <p className="final-reassure">Free to start. No card.</p>
+            <p className="final-reassure">No card, no commitment.</p>
           </Reveal>
           <Reveal delay={1} className="final-panel final-panel-business">
             <h3>Dive centres</h3>

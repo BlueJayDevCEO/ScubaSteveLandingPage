@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { trackLandingEventOncePerSession } from "../analytics";
-import { EnquiryActions } from "../components/EnquiryActions";
 import { PilotForm } from "../components/PilotForm";
 import { Reveal } from "../components/Reveal";
 import { ShopConversation } from "../components/ShopConversation";
@@ -289,7 +288,6 @@ export function DiveCentresPage() {
             Prefer email? Reply directly to the message that sent you here, or write to{" "}
             <a href={enquiryMailto("dive-centre")}>steve@scubasteve.rocks</a>.
           </p>
-          <EnquiryActions kind="dive-centre" section="dive_centres_page" />
         </Reveal>
       </section>
     </main>

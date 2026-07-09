@@ -1277,33 +1277,6 @@ form button:hover {
 .footer-form h3 { color: #fff; margin-bottom: 4px; }
 .footer-form p { color: var(--ink-onraft-soft); font-size: 0.9rem; margin-bottom: 4px; }
 .footer-form-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.footer-enquiry {
-  max-width: var(--container);
-  margin: 24px auto 0;
-  padding: 20px 22px;
-  border: 1px solid var(--line-dark);
-  border-radius: var(--r-md);
-  background: rgba(255, 255, 255, 0.03);
-  display: grid;
-  gap: 6px;
-}
-.footer-enquiry h3 { color: #fff; margin-bottom: 2px; }
-.footer-enquiry > p { color: var(--ink-onraft-soft); font-size: 0.92rem; margin: 0 0 8px; }
-.enquiry-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-}
-.enquiry-cta { text-decoration: none; }
-.enquiry-note {
-  flex-basis: 100%;
-  margin: 4px 0 0;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--ink-onraft-soft);
-}
-.enquiry-note span { color: var(--accent-air); }
 
 .form-hint {
   font-family: var(--font-mono);
@@ -1311,6 +1284,8 @@ form button:hover {
   color: var(--ink-onraft-soft);
   margin: 2px 0 0;
 }
+.label-optional { color: var(--ink-onraft-soft); font-weight: 400; font-size: 0.82em; }
+.success a, .error a { color: inherit; font-weight: 700; }
 
 .footer-meta {
   max-width: var(--container);

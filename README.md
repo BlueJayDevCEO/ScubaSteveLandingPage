@@ -101,23 +101,27 @@ Client build variable:
 VITE_APP_URL=...
 ```
 
-### Enquiry email notifications
+### Enquiry email (required for forms to deliver)
 
-Every form submission (diver signup and dive-centre pilot application) is emailed
-to the enquiry inbox in addition to being stored in Firestore. Contact links across
-the site also point to this address.
+Both forms (footer contact/updates and the dive-centre pilot application) POST to
+the first-party endpoint `/api/business-interest`, which emails the enquiry inbox
+via [Resend](https://resend.com) and optionally stores the lead in Firestore.
+Email delivery is decoupled from Firestore — it works even if Firebase is not
+configured. Contact links also point to this address.
 
 Enquiry inbox: `steve@scubasteve.rocks`
 
 ```bash
-RESEND_API_KEY=re_...                               # required to actually send
+RESEND_API_KEY=re_...                               # required for delivery
 ENQUIRY_EMAIL=steve@scubasteve.rocks                # optional, this is the default
 ENQUIRY_FROM="Scuba Steve <steve@scubasteve.rocks>" # must be a Resend-verified domain
 ```
 
-Create the key at [resend.com](https://resend.com) and verify the `scubasteve.rocks`
-domain so `ENQUIRY_FROM` can send from it. If `RESEND_API_KEY` is unset, email sending
-is skipped and leads still save to Firestore (no errors).
+Setup: create the key at [resend.com](https://resend.com) and verify the
+`scubasteve.rocks` domain (add the DNS records Resend gives you) so `ENQUIRY_FROM`
+can send from it. Until `RESEND_API_KEY` is set (and Firebase is also unset), the
+endpoint returns 503 and the forms show an error with a fallback `mailto:` link.
+Firebase admin creds (below) are optional and only add Firestore lead storage.
 
 ### Firebase credentials
 

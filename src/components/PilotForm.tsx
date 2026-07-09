@@ -1,14 +1,13 @@
 import { FormEvent, useRef, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
-import { pilotMailto } from "../enquiry";
+import { ENQUIRY_EMAIL, sendToInbox } from "../inbox";
 
-type SubmitState = "idle" | "sent";
+type SubmitState = "idle" | "loading" | "success" | "error";
 
 /**
- * Dive-centre pilot application. On submit it composes the application as an
- * email from the applicant's own mailbox (mailto) to the enquiry inbox — sent
- * from their mailbox, no backend needed. A silent best-effort POST also stores
- * the lead in Firestore when the backend is configured.
+ * Dive-centre pilot application. Delivered server-side via our own
+ * /api/business-interest endpoint (Resend email + optional Firestore) so it
+ * reaches steve@scubasteve.rocks on any device. Reply-to is the applicant's email.
  */
 export function PilotForm() {
   const [state, setState] = useState<SubmitState>("idle");
@@ -26,21 +25,26 @@ export function PilotForm() {
     });
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    if (state === "loading") return;
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     if (form.get("websiteUrl")) return; // honeypot
 
     const fields = {
+      visitorType: "business",
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
       businessName: String(form.get("businessName") || ""),
       businessType: String(form.get("businessType") || ""),
       country: String(form.get("country") || ""),
       website: String(form.get("website") || ""),
-      message: String(form.get("message") || "")
+      message: String(form.get("message") || ""),
+      websiteUrl: ""
     };
 
+    setState("loading");
     trackLandingEvent("dive_centre_form_submitted", {
       source_section: "pilot_form",
       business_type: fields.businessType || "unspecified",
@@ -56,17 +60,26 @@ export function PilotForm() {
       has_message: fields.message ? "true" : "false"
     });
 
-    // Silent best-effort capture (only if backend configured); never blocks the email.
-    fetch("/api/business-interest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ visitorType: "business", ...fields, websiteUrl: "" })
-    }).catch(() => {});
-
-    // Primary: open the applicant's mailbox with the application ready to send.
-    window.location.href = pilotMailto(fields);
-    setState("sent");
+    const ok = await sendToInbox(fields);
+    if (ok) {
+      formElement.reset();
+      setState("success");
+      trackLandingEvent("business_form_success", {
+        source_section: "pilot_form",
+        visitor_type_signal: "business",
+        business_type: fields.businessType || "unspecified"
+      });
+    } else {
+      setState("error");
+      trackLandingEvent("business_form_error", {
+        source_section: "pilot_form",
+        visitor_type_signal: "business",
+        error_type: "delivery_failed"
+      });
+    }
   }
+
+  const loading = state === "loading";
 
   return (
     <form
@@ -78,19 +91,19 @@ export function PilotForm() {
       <div className="form-grid">
         <label>
           Your name
-          <input name="name" type="text" autoComplete="name" required />
+          <input name="name" type="text" autoComplete="name" required disabled={loading} />
         </label>
         <label>
           Work email
-          <input name="email" type="email" autoComplete="email" required />
+          <input name="email" type="email" autoComplete="email" required disabled={loading} />
         </label>
         <label>
           Business name
-          <input name="businessName" type="text" autoComplete="organization" required />
+          <input name="businessName" type="text" autoComplete="organization" required disabled={loading} />
         </label>
         <label>
           Business type
-          <select name="businessType" required defaultValue="">
+          <select name="businessType" required defaultValue="" disabled={loading}>
             <option value="" disabled>
               Select one
             </option>
@@ -104,11 +117,11 @@ export function PilotForm() {
         </label>
         <label>
           Country
-          <input name="country" type="text" autoComplete="country-name" required />
+          <input name="country" type="text" autoComplete="country-name" required disabled={loading} />
         </label>
         <label>
           Website
-          <input name="website" type="url" placeholder="Optional" />
+          <input name="website" type="url" placeholder="Optional" disabled={loading} />
         </label>
       </div>
       <label className="honeypot-field" aria-hidden="true">
@@ -120,15 +133,20 @@ export function PilotForm() {
         <textarea
           name="message"
           placeholder="Optional: location, typical customers, and the questions your team answers most often."
+          disabled={loading}
         />
       </label>
-      <button type="submit" className="primary-cta pilot-submit">
-        Apply for the pilot
+      <button type="submit" className="primary-cta pilot-submit" disabled={loading}>
+        {loading ? "Sending…" : "Apply for the pilot"}
       </button>
-      <p className="form-hint">Opens your email app with your application ready to send from your mailbox.</p>
-      {state === "sent" && (
+      {state === "success" && (
         <p className="success" role="status">
-          Your email app should open with your application — just hit send. We reply personally by email.
+          Thanks — your application is on its way to Steve. We review pilot applications personally and reply by email.
+        </p>
+      )}
+      {state === "error" && (
+        <p className="error" role="alert">
+          Something went wrong sending that. Please email <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a> directly.
         </p>
       )}
     </form>
