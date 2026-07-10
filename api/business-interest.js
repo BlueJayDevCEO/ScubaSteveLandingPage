@@ -62,36 +62,42 @@ export default async function handler(req, res) {
 
   let stored = false;
   let emailed = false;
+  let duplicateStore = false;
 
   // 1) Store in Firestore if configured (best-effort — never blocks email).
+  // A previously-seen email only skips re-writing the Firestore doc; it must
+  // NEVER skip the email below — every valid submission gets emailed, even
+  // from a repeat visitor asking a new question.
   if (hasFirebase) {
     try {
       const documentId = crypto.createHash("sha256").update(email).digest("hex");
       const documentPath = `${COLLECTION_NAME}/${documentId}`;
       const existing = await firestoreRequest(credentials, documentPath);
       if (existing.ok) {
-        // Already captured — treat as delivered so the visitor sees success.
-        return res.status(200).json({ ok: true, duplicate: true });
+        duplicateStore = true;
+        stored = true;
+      } else {
+        const payload = toFirestoreFields({
+          ...lead,
+          source: "landing-page",
+          createdAt: new Date(),
+          userAgent: sanitizeText(req.headers["user-agent"], 500),
+          referrer: sanitizeText(req.headers.referer || req.headers.referrer, 500)
+        });
+        const response = await firestoreRequest(credentials, documentPath, {
+          method: "PATCH",
+          body: JSON.stringify(payload)
+        });
+        stored = response.ok;
+        if (!stored) console.error("business_interest_store_failed", response.status);
       }
-      const payload = toFirestoreFields({
-        ...lead,
-        source: "landing-page",
-        createdAt: new Date(),
-        userAgent: sanitizeText(req.headers["user-agent"], 500),
-        referrer: sanitizeText(req.headers.referer || req.headers.referrer, 500)
-      });
-      const response = await firestoreRequest(credentials, documentPath, {
-        method: "PATCH",
-        body: JSON.stringify(payload)
-      });
-      stored = response.ok;
-      if (!stored) console.error("business_interest_store_failed", response.status);
     } catch (storeError) {
       console.error("business_interest_store_error", storeError);
     }
   }
 
-  // 2) Email the enquiry to the inbox via Resend if configured.
+  // 2) Email the enquiry to the inbox via Resend if configured — always, on
+  // every valid submission, regardless of Firestore dedup state.
   if (hasEmail) {
     try {
       await sendEnquiryNotification({ ...lead, source: "landing-page" });
@@ -102,7 +108,7 @@ export default async function handler(req, res) {
   }
 
   if (stored || emailed) {
-    return res.status(200).json({ ok: true, duplicate: false, stored, emailed });
+    return res.status(200).json({ ok: true, duplicate: duplicateStore, stored, emailed });
   }
 
   return res.status(500).json({ error: "We could not send your enquiry right now. Please try again in a moment." });
