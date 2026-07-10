@@ -7,10 +7,10 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "node api.js && vite",
     "lint": "tsc -p tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "build": "vite build",
+    "build": "node api.js && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
