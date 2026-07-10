@@ -1343,7 +1343,15 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(95, 202, 218, 0.18);
   outline: 0;
 }
-.honeypot-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/*
+ * display:none (not off-screen positioning) is deliberate: off-screen fields
+ * still have a layout box and get targeted by browser/password-manager
+ * autofill (the field name/label look like a "website" field), which silently
+ * poisons the honeypot and aborts real submissions with zero feedback.
+ * display:none removes it from layout, tab order and autofill scanning while
+ * still catching bots that blindly fill every input via the DOM.
+ */
+.honeypot-field { display: none; }
 .success,
 .error { border-radius: var(--r-sm); font-weight: 600; margin: 0; padding: 12px 14px; }
 .success { background: #e7f9ee; color: #16613c; }
