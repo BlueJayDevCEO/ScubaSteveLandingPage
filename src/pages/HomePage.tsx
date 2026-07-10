@@ -332,24 +332,33 @@ export function HomePage() {
           </Reveal>
         </div>
         <Reveal className="founder-strip">
-          <p className="founder-name">Built by a diver, for divers</p>
-          <p>
-            Scuba Steve is built by Jay Van der Colff, a diving instructor and founder of OSEA Diver. Steve
-            exists because the questions divers ask don't stop when the dive ends.
-          </p>
-          <a
-            className="founder-challenge"
-            href={buildAppUrl("trust")}
-            onClick={() =>
-              trackLandingEvent("open_scuba_steve_clicked", {
-                source_section: "trust",
-                cta_label: "Ask Steve something hard",
-                visitor_type_signal: "diver"
-              })
-            }
-          >
-            Don't take our word for it — ask Steve something hard from your own diving →
-          </a>
+          <img
+            className="founder-photo"
+            src={media.product.stevePortrait.src}
+            alt="Steve, the Scuba Steve AI dive buddy"
+            loading="lazy"
+            decoding="async"
+          />
+          <div>
+            <p className="founder-name">Built by a diver, for divers</p>
+            <p>
+              Scuba Steve is built by Jay Van der Colff, a diving instructor and founder of OSEA Diver. Steve
+              exists because the questions divers ask don't stop when the dive ends.
+            </p>
+            <a
+              className="founder-challenge"
+              href={buildAppUrl("trust")}
+              onClick={() =>
+                trackLandingEvent("open_scuba_steve_clicked", {
+                  source_section: "trust",
+                  cta_label: "Ask Steve something hard",
+                  visitor_type_signal: "diver"
+                })
+              }
+            >
+              Don't take our word for it — ask Steve something hard from your own diving →
+            </a>
+          </div>
         </Reveal>
       </section>
 

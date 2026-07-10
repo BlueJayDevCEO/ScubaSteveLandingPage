@@ -127,6 +127,13 @@ export function Footer() {
           <Link to={DIVE_CENTRES_PATH}>Dive Centre Pilot</Link>
           <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a>
         </nav>
+        <div className="footer-legal">
+          <img src={media.brand.oseaLogo.src} alt="" width="28" height="28" aria-hidden="true" />
+          <div>
+            <p>OSEA diver ltd © {new Date().getFullYear()}</p>
+            <p className="footer-legal-ico">ICO registration: ZC167586</p>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { trackLandingEvent } from "../analytics";
+import { media } from "../media";
 
 /**
  * Hero "Ask-Steve" panel (strategy §9). A question types in, a short thinking
@@ -204,7 +205,7 @@ export function HeroDemo() {
   return (
     <div className="hero-demo" ref={rootRef}>
       <div className="hero-demo-head">
-        <div className="steve-avatar" aria-hidden="true">S</div>
+        <img className="steve-avatar" src={media.product.stevePortrait.src} alt="" aria-hidden="true" width="38" height="38" />
         <div>
           <b>Scuba Steve</b>
           <small>Dive buddy</small>

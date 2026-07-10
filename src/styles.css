@@ -504,13 +504,8 @@ form button:hover {
   height: 38px;
   flex: none;
   border-radius: var(--r-pill);
-  background: linear-gradient(150deg, var(--accent-air), var(--depth-10));
-  display: grid;
-  place-items: center;
-  color: var(--depth-40);
-  font-weight: 800;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
+  object-fit: cover;
+  border: 1px solid var(--line-dark);
 }
 .hero-demo-head b {
   color: #fff;
@@ -1156,9 +1151,19 @@ form button:hover {
   background: rgba(255, 255, 255, 0.03);
   padding: 24px;
   display: grid;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: center;
 }
-.founder-strip .founder-name { color: #fff; font-family: var(--font-display); font-weight: 700; }
+.founder-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--line-dark);
+  justify-self: start;
+}
+.founder-strip .founder-name { color: #fff; font-family: var(--font-display); font-weight: 700; margin-bottom: 6px; }
 .founder-strip p { color: var(--ink-onraft-soft); margin: 0; }
 .founder-challenge {
   color: var(--accent-air);
@@ -1299,6 +1304,20 @@ form button:hover {
 .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
 .footer-links a { color: var(--accent-air); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
 .footer-links a:hover { text-decoration: underline; }
+
+.footer-legal {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-dark);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.03);
+  width: fit-content;
+}
+.footer-legal img { border-radius: 50%; background: #fff; padding: 2px; flex: none; }
+.footer-legal p { margin: 0; color: var(--ink-onraft-soft); font-size: 0.82rem; font-weight: 600; }
+.footer-legal-ico { font-family: var(--font-mono); font-size: 0.7rem !important; font-weight: 400 !important; opacity: 0.8; margin-top: 2px !important; }
 
 /* ---------- Forms ---------- */
 form { display: grid; gap: 14px; }
@@ -1530,6 +1549,7 @@ textarea:focus {
   .capability:nth-child(2) { border-top: 1px solid var(--line-light); }
   .why-points { grid-template-columns: repeat(3, 1fr); }
   .trust-columns { grid-template-columns: 1fr 1fr; }
+  .founder-strip { grid-template-columns: auto 1fr; }
   .final-split { grid-template-columns: 1fr 1fr; }
   .footer-form-row { grid-template-columns: repeat(3, 1fr); }
   .form-grid { grid-template-columns: repeat(2, 1fr); }
