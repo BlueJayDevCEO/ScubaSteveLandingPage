@@ -9,7 +9,7 @@ import { media } from "../media";
 const OWNER_FAQ = [
   {
     q: "Where does Steve get its answers?",
-    a: "Only from the information you approve — your courses, prices, schedules, sites and policies — plus Steve's general diving context. It does not invent shop-specific details."
+    a: "From the courses, prices, schedules, sites and policies you approve, alongside Steve's general diving knowledge. It does not invent shop-specific details."
   },
   {
     q: "What if it doesn't know something?",
@@ -21,11 +21,11 @@ const OWNER_FAQ = [
   },
   {
     q: "What does the pilot cost?",
-    a: "Pilot terms are discussed personally with each shop — tell us about your business and we'll talk specifics by email."
+    a: "Pilot terms are discussed personally with each shop. Tell us about your business and we'll talk specifics by email."
   },
   {
     q: "Can we review it before customers see it?",
-    a: "Yes. Reviewing how your Steve answers is a required step before anything goes live — that's step three of the pilot."
+    a: "Yes. Reviewing how your Steve answers is a required step before anything goes live. That's step three of the pilot."
   }
 ];
 
@@ -42,7 +42,7 @@ const SHOP_KNOWLEDGE = [
 const CUSTOMER_QUESTIONS = [
   "“Do I need a licence to try diving with you?”",
   "“What courses run in July, and what do they cost?”",
-  "“I'm certified but haven't dived in two years — what do I need?”",
+  "“I'm certified but haven't dived in two years. What do I need?”",
   "“Can my kids snorkel while I dive?”",
   "“What's included in the rental package?”",
   "“Which of your sites suit a nervous open-water diver?”"
@@ -114,7 +114,7 @@ export function DiveCentresPage() {
           </h1>
           <p className="subheadline">
             A pilot programme for selected dive centres: a shop-specific AI assistant configured around your
-            courses, schedules, sites and policies — answering customer questions and handing qualified
+            courses, schedules, sites and policies. Steve answers customer questions and passes qualified
             enquiries to your team.
           </p>
           <div className="cta-row">
@@ -123,7 +123,7 @@ export function DiveCentresPage() {
             </button>
           </div>
           <p className="hero-microcopy">
-            Pilot programme — limited configuration slots, reviewed personally.
+            Pilot places are limited. We review each application personally.
           </p>
         </div>
       </header>
@@ -135,7 +135,7 @@ export function DiveCentresPage() {
           <h2 id="b2b-problem-heading">Your team answers the same questions every day.</h2>
           <p className="section-lede">
             Course prices. Prerequisites. What's included in a rental. Whether a nervous open-water diver can
-            handle your house reef. Every one matters to the customer — and every one takes your staff away
+            handle your house reef. Every one matters to the customer, and every one takes your staff away
             from the boat, the shop floor and the students in front of them. After hours, those questions go
             unanswered entirely.
           </p>
@@ -149,12 +149,12 @@ export function DiveCentresPage() {
             <p className="eyebrow dark-eyebrow">The pilot concept</p>
             <h2 id="b2b-what-heading">What is Dive Shop Steve?</h2>
             <p>
-              Scuba Steve already understands diving — trip planning, marine life, sites, training context. The
-              pilot adds what generic assistants can never have: <strong>your shop's actual information.</strong>
+              Scuba Steve helps with trip planning, marine life identification, dive sites and training questions. The
+              pilot adds <strong>your shop's actual information.</strong>
             </p>
             <p>
-              A shop-specific Steve is configured around what you provide, and answers customers from it — in
-              diving context, with your contact path as the handoff.
+              We configure your Steve using the information you provide. It answers customer questions and
+              directs enquiries to your team through your chosen contact method.
             </p>
             <h3 className="b2b-list-heading">What your Steve can know</h3>
             <ul className="b2b-checklist">
@@ -193,19 +193,19 @@ export function DiveCentresPage() {
           <Reveal as="div" delay={1} className="journey-step">
             <li>
               <strong>Steve answers from your information</strong>
-              <span>Your courses, prices, sites and policies — inside real diving context.</span>
+              <span>Your courses, prices, sites and policies, explained with diving knowledge.</span>
             </li>
           </Reveal>
           <Reveal as="div" delay={2} className="journey-step">
             <li>
               <strong>Steve qualifies the enquiry</strong>
-              <span>Certification level, dates, group size — the details your team needs.</span>
+              <span>Certification level, dates, group size: the details your team needs.</span>
             </li>
           </Reveal>
           <Reveal as="div" delay={3} className="journey-step">
             <li>
               <strong>Your team takes over</strong>
-              <span>Handoff through your configured contact path — email, WhatsApp or enquiry form.</span>
+              <span>Handoff through your configured contact path: email, WhatsApp or enquiry form.</span>
             </li>
           </Reveal>
         </ol>
@@ -246,7 +246,7 @@ export function DiveCentresPage() {
               ))}
             </ul>
             <p className="pilot-future-note">
-              These are future possibilities we're exploring with pilot partners — we'll only describe them as
+              These are future possibilities we're exploring with pilot partners. We'll only describe them as
               features when they actually exist.
             </p>
           </Reveal>
@@ -277,7 +277,7 @@ export function DiveCentresPage() {
           <p className="eyebrow b2b-eyebrow">Application</p>
           <h2 id="b2b-apply-heading">Apply for the Dive Centre Pilot.</h2>
           <p className="section-lede">
-            Tell us about your shop. We review applications personally and reply by email — no automated
+            Tell us about your shop. We review applications personally and reply by email. There is no automated
             sales sequence. Accepted shops receive a private onboarding link after review.
           </p>
         </Reveal>

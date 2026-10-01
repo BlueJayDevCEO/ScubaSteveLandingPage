@@ -17,8 +17,8 @@ const MOMENTS = [
 ];
 
 const CAPABILITIES = [
-  { name: "Chat with Steve", text: "Plain-language diving questions, answered with diving context — not generic web summaries." },
-  { name: "Dive Trip Planner", text: "Destination shapes, day-by-day structure, operator questions and logistics worth checking." },
+  { name: "Chat with Steve", text: "Plain-language diving questions, answered with the context divers need." },
+  { name: "Dive Trip Planner", text: "Suggested destinations, daily itineraries, operator questions and logistics worth checking." },
   { name: "Marine ID", text: "Photo-based species identification starting points with habitat and behaviour context." },
   { name: "Dive Site Research", text: "Conditions, depth ranges, entries and what a site is actually known for." },
   { name: "Photo Color Fix", text: "One-tap underwater colour correction that brings the reds back to your dive photos." },
@@ -34,7 +34,7 @@ const HOW_STEPS = [
   {
     n: "02",
     title: "Steve answers in diving context",
-    text: "Structured trip plans, marine ID starting points, site briefs and refreshers — not generic web summaries."
+    text: "Structured trip plans, marine ID starting points, site briefs and knowledge refreshers."
   },
   {
     n: "03",
@@ -54,7 +54,7 @@ const STEVE_IS_NOT = [
   "A replacement for instructors or dive professionals",
   "A source of medical advice",
   "A substitute for local briefings and conditions checks",
-  "An emergency resource — always follow your training"
+  "An emergency resource. Always follow your training"
 ];
 
 const sectionTrackingEvents = [
@@ -135,7 +135,7 @@ export function HomePage() {
             <span className="hero-accent">Before, between and after dives.</span>
           </h1>
           <p className="subheadline">
-            Plan trips, identify marine life, research dive sites and refresh your skills — with an assistant
+            Plan trips, identify marine life, research dive sites and refresh your skills with an assistant
             built only for diving.
           </p>
           <div className="cta-row hero-actions">
@@ -147,7 +147,7 @@ export function HomePage() {
             </button>
           </div>
           <p className="hero-microcopy">
-            Free to start. A planning and learning buddy — never a replacement for training or local briefings.
+            Free to start. A buddy for planning and learning. Always follow your training and local briefings.
           </p>
         </div>
         <div className="hero-visual">
@@ -285,15 +285,15 @@ export function HomePage() {
             <div>
               <h3>Speaks diving</h3>
               <p>
-                Nitrox, surface intervals, ragged-tooth season, no-fly windows — Steve is built around diving
+                Nitrox, surface intervals, ragged-tooth season, no-fly windows. Steve is built around diving
                 vocabulary and context, so you don't have to explain the basics before asking your question.
               </p>
             </div>
             <div>
-              <h3>Structured dive workflows</h3>
+              <h3>Tools for your next dive</h3>
               <p>
-                Trip planning, marine ID, site research and refreshers are purpose-built flows — not one chat
-                box trying to be everything.
+                Trip planning, marine ID, site research and refreshers each have their own tool,
+                so you can find what you need quickly.
               </p>
             </div>
             <div>
@@ -356,7 +356,7 @@ export function HomePage() {
                 })
               }
             >
-              Don't take our word for it — ask Steve something hard from your own diving →
+              Try Steve with a question from your own diving →
             </a>
           </div>
         </Reveal>
@@ -365,12 +365,12 @@ export function HomePage() {
       {/* 8. DIVE CENTRE TEASER */}
       <section id="dive-centres-teaser" className="b2b-teaser" aria-labelledby="b2b-heading">
         <Reveal className="b2b-teaser-content">
-          <p className="eyebrow b2b-eyebrow">For dive centres — pilot programme</p>
+          <p className="eyebrow b2b-eyebrow">Pilot programme for dive centres</p>
           <h2 id="b2b-heading">What if Steve knew your dive centre?</h2>
           <p>
             We're piloting shop-specific assistants with selected dive centres: a Steve configured around your
-            courses, prices, schedules, trips, local sites, rental gear and policies — answering customer
-            questions and handing qualified enquiries to your team.
+            courses, prices, schedules, trips, local sites, rental gear and policies. Steve answers customer
+            questions and passes qualified enquiries to your team.
           </p>
           <Link
             to={DIVE_CENTRES_PATH}
@@ -414,7 +414,7 @@ export function HomePage() {
               Free <span className="tier-price">$0</span>
             </h3>
             <p>
-              Daily use of chat, marine ID, trip planning, site research and refreshers — enough to really put
+              Daily use of chat, marine ID, trip planning, site research and refreshers, so you can put
               Steve to work. No card to start.
             </p>
           </Reveal>
@@ -423,7 +423,7 @@ export function HomePage() {
               Pro <span className="tier-price">Subscription</span>
             </h3>
             <p>
-              For frequent divers — higher daily limits across every tool. Upgrade in the app whenever you're
+              Higher daily limits across every tool for frequent divers. Upgrade in the app whenever you're
               ready.
             </p>
           </Reveal>
@@ -455,7 +455,7 @@ export function HomePage() {
         <div className="final-split">
           <Reveal className="final-panel final-panel-diver">
             <h3>Divers</h3>
-            <p>Plan, identify, research and refresh — all in one place.</p>
+            <p>Plan, identify, research and refresh in one place.</p>
             <button
               className="primary-cta primary-cta-strong"
               onClick={() => {

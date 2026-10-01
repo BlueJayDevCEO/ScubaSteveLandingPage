@@ -36,14 +36,14 @@ const DEMO_TABS: DemoTab[] = [
     prompt: "Plan me a 7-day dive trip to Mozambique for two divers and one non-diver.",
     answer: [
       "Great brief. Tofo or Ponta do Ouro both work well for that mix.",
-      "Here's a rough shape to react to — want me to draft operator questions and a packing list next?"
+      "Here's a rough shape to react to. Would you like me to draft operator questions and a packing list next?"
     ],
     artifact: {
       kind: "itinerary",
       head: "Draft itinerary · 7 days · Tofo",
       rows: [
-        { day: "Day 1–2", text: "Arrive, settle in, easy check dives" },
-        { day: "Day 3–5", text: "Two-tank mornings — Manta Reef, Giant's Castle" },
+        { day: "Days 1 to 2", text: "Arrive, settle in, easy check dives" },
+        { day: "Days 3 to 5", text: "Two-tank mornings at Manta Reef, Giant's Castle" },
         { day: "Day 6", text: "Ocean safari your non-diver can join" },
         { day: "Day 7", text: "No-fly buffer before flying home" }
       ],
@@ -56,7 +56,7 @@ const DEMO_TABS: DemoTab[] = [
     prompt: "What species is this, and where is it normally found?",
     attachment: "reef-photo.jpg",
     answer: [
-      "That looks like a honeycomb moray — the dark honeycomb pattern is distinctive.",
+      "That looks like a honeycomb moray. The dark honeycomb pattern is distinctive.",
       "The mouth slowly opening and closing is breathing, not aggression. Treat this as a starting point and confirm with your local guide."
     ],
     artifact: {
@@ -74,14 +74,14 @@ const DEMO_TABS: DemoTab[] = [
     label: "Dive Sites",
     prompt: "What should I know before diving Aliwal Shoal?",
     answer: [
-      "Aliwal Shoal is a rocky reef about 5 km offshore — expect boat entries and some surge.",
+      "Aliwal Shoal is a rocky reef about 5 km offshore. Expect boat entries and some surge.",
       "Currents can pick up quickly, so book with a local operator and follow their briefing. Want a conditions checklist for your dates?"
     ],
     artifact: {
       kind: "brief",
       head: "Site brief · Aliwal Shoal",
       facts: [
-        { label: "Depth", value: "12–30 m" },
+        { label: "Depth", value: "12 to 30 m" },
         { label: "Entry", value: "Boat" },
         { label: "Conditions", value: "Surge, variable current" },
         { label: "Known for", value: "Raggies (cooler months)" }
@@ -94,7 +94,7 @@ const DEMO_TABS: DemoTab[] = [
     prompt: "I haven't dived in eight months. What should I refresh before my next trip?",
     answer: [
       "Eight months out of the water is worth a proper refresh.",
-      "A pool refresher with an instructor is the gold standard — I can build a study plan for the knowledge side."
+      "A pool refresher with an instructor is the gold standard. I can build a study plan for the knowledge side."
     ],
     artifact: {
       kind: "checklist",
@@ -347,7 +347,7 @@ export function DemoShowcase({ activeId: controlledId, onSelect }: DemoShowcaseP
         </button>
       </div>
       <p className="demo-note">
-        Illustrative example — based on real Scuba Steve answers. Real answers adapt to you and stay safety-aware.
+        Illustrative example based on real Scuba Steve answers. Real answers adapt to you and stay safety-aware.
       </p>
     </div>
   );

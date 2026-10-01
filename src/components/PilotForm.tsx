@@ -73,7 +73,7 @@ export function PilotForm({ initialTopic = "pilot" }: { initialTopic?: Topic }) 
       <label className="honeypot-field" aria-hidden="true">Website URL<input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" /></label>
       <label>Message <span className="label-optional">(optional)</span><textarea name="message" placeholder={isPilot ? "Tell us about your shop and the questions your team answers most often." : "What would you like to ask Steve?"} disabled={loading} /></label>
       <button type="submit" className="primary-cta pilot-submit" disabled={loading}>{loading ? "Sending…" : isPilot ? "Apply for the pilot" : "Send to Steve"}</button>
-      {state === "success" && <p className="success" role="status">Thanks — your enquiry has been received. We’ll reply by email.</p>}
+      {state === "success" && <p className="success" role="status">Thanks, your enquiry has been received. We’ll reply by email.</p>}
       {state === "error" && <p className="error" role="alert">Something went wrong sending that. Please email <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a> directly.</p>}
     </form>
   );

@@ -18,7 +18,7 @@ export function Footer({ showEnquiryForm = true }: { showEnquiryForm?: boolean }
           <div>
             <strong>Scuba Steve AI</strong>
             <span>
-              An OSEA Diver product. Built to help divers plan, identify, research and refresh — and to help
+              An OSEA Diver product. Built to help divers plan, identify, research and refresh, and to help
               dive centres answer customers faster.
             </span>
           </div>

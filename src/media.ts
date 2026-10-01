@@ -74,16 +74,16 @@ export const media = {
     },
     colorFixBefore: {
       src: "/images/colorfix-before.jpg",
-      alt: "Real underwater reef photo before colour correction — washed out and blue",
+      alt: "Real underwater reef photo before colour correction, washed out and blue",
       source: "Derived from Firebase PA310001.JPG, resized/optimized into landing public/images/colorfix-before.jpg",
-      suggestedUse: "Color Fix before/after slider — BEFORE frame",
+      suggestedUse: "Color Fix before/after slider: BEFORE frame",
       safeForPublicMarketing: true
     },
     colorFixAfter: {
       src: "/images/colorfix-after.jpg",
-      alt: "The same reef photo after underwater colour correction — reds restored, natural colour",
+      alt: "The same reef photo after underwater colour correction, reds restored, natural colour",
       source: "PA310001.JPG processed with gray-world white balance + contrast/saturation, landing public/images/colorfix-after.jpg",
-      suggestedUse: "Color Fix before/after slider — AFTER frame",
+      suggestedUse: "Color Fix before/after slider: AFTER frame",
       safeForPublicMarketing: true
     },
     stevePortrait: {

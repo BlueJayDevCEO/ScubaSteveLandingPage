@@ -1119,7 +1119,7 @@ form button:hover {
   line-height: 1.5;
 }
 .trust-col-is li::before { content: "✓"; color: var(--accent-air); font-weight: 800; flex: none; }
-.trust-col-not li::before { content: "—"; color: var(--accent-signal); font-weight: 800; flex: none; }
+.trust-col-not li::before { content: "×"; color: var(--accent-signal); font-weight: 800; flex: none; }
 
 .founder-strip {
   max-width: var(--container);
@@ -1195,7 +1195,7 @@ form button:hover {
 }
 .faq-list summary::-webkit-details-marker { display: none; }
 .faq-list summary::after { content: "+"; color: var(--accent-air-deep); font-weight: 800; }
-.faq-list details[open] summary::after { content: "–"; }
+.faq-list details[open] summary::after { content: "−"; }
 .faq-list p { color: var(--ink-soft); margin: 12px 0 0; }
 
 /* ---------- Final CTA ---------- */

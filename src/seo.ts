@@ -1,5 +1,5 @@
 export const pilotMeta = {
-  title: "Dive Centre Pilot — Scuba Steve AI for Dive Shops",
+  title: "Dive Centre Pilot: Scuba Steve AI for Dive Shops",
   description: "Apply for the Scuba Steve Dive Centre Pilot. Selected shops provide courses, pricing, schedules and local knowledge for review before customer testing.",
   url: "https://www.scubasteve.rocks/dive-centres"
 };

@@ -31,14 +31,14 @@ const SCRIPTS: HeroScript[] = [
     chip: "Plan my Mozambique trip",
     question: "Plan my 7-day Mozambique dive trip for two divers and one non-diver.",
     answer: [
-      "Tofo works well for that mix — big-animal diving plus easy surface options.",
+      "Tofo works well for that mix, with big-animal diving plus easy surface options.",
       "Rough shape below. Want operator questions and a packing list next?"
     ],
     artifact: {
       head: "Draft itinerary · 7 days",
       lines: [
-        "D1–2 · Arrive + check dives",
-        "D3–5 · Two-tank mornings (Manta Reef)",
+        "Days 1 to 2 · Arrive + check dives",
+        "Days 3 to 5 · Two-tank mornings (Manta Reef)",
         "D6 · Ocean safari (non-diver joins)",
         "D7 · No-fly buffer before flying"
       ]
@@ -49,8 +49,8 @@ const SCRIPTS: HeroScript[] = [
     chip: "What's this eel? 📷",
     question: "What species is this, and where is it normally found?",
     answer: [
-      "Looks like a honeycomb moray — the dark lattice pattern is distinctive.",
-      "The open mouth is breathing, not aggression. A starting point — confirm with your local guide."
+      "Looks like a honeycomb moray. The dark lattice pattern is distinctive.",
+      "The open mouth is breathing, not aggression. Use this as a starting point and confirm with your local guide."
     ],
     artifact: {
       head: "Likely match",
@@ -67,7 +67,7 @@ const SCRIPTS: HeroScript[] = [
     question: "I haven't dived in eight months. What should I refresh?",
     answer: [
       "Eight months out is worth a proper refresh before you giant-stride in.",
-      "A pool refresher with an instructor is the gold standard — I can build the study side."
+      "A pool refresher with an instructor is the gold standard. I can build the study side."
     ],
     artifact: {
       head: "Refresh checklist",
@@ -257,7 +257,7 @@ export function HeroDemo() {
         ) : null}
       </div>
 
-      <p className="demo-disclaimer">Illustrative example — real answers adapt to you.</p>
+      <p className="demo-disclaimer">Illustrative example. Real answers adapt to you.</p>
     </div>
   );
 }

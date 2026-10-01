@@ -30,10 +30,10 @@ export function ShopConversation() {
       <div className="shop-convo-head">Example · with sample shop information</div>
       <div className="shop-convo-body">
         <div className="shop-msg shop-msg-customer">
-          I'm certified but haven't dived in two years — can I join Saturday's boat?
+          I'm certified but haven't dived in two years. Can I join Saturday's boat?
         </div>
         <div className="shop-msg shop-msg-steve">
-          Welcome back! After two years we ask divers to do a Reef Refresher first — it's a half-day, $49,
+          Welcome back! After two years we ask divers to do a Reef Refresher first. It's a half-day, $49,
           and runs Saturday mornings before the afternoon boat. Do that and you're set for Saturday's 13:00
           departure to our house reef.
           <br />
@@ -42,7 +42,7 @@ export function ShopConversation() {
       </div>
       <p className="shop-convo-note">
         Sample answer using example shop information. Your Steve answers only from the courses, prices,
-        schedules and policies you approve — and hands off through your own contact path.
+        schedules and policies you approve and hands off through your own contact path.
       </p>
     </div>
   );
