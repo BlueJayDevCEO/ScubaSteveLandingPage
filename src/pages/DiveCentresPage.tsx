@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { trackLandingEventOncePerSession } from "../analytics";
+import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
 import { PilotForm } from "../components/PilotForm";
 import { Reveal } from "../components/Reveal";
 import { ShopConversation } from "../components/ShopConversation";
@@ -71,7 +71,7 @@ const PILOT_STEPS = [
   },
   {
     title: "Configure",
-    text: "You provide the shop information — courses, prices, schedules, sites, policies. We configure your Steve around it."
+    text: "OSEA reviews your application. If accepted, you receive a private onboarding link to provide courses, prices, schedules, sites and policies for review."
   },
   {
     title: "Review",
@@ -94,6 +94,7 @@ export function DiveCentresPage() {
   }, []);
 
   function scrollToApply() {
+    trackLandingEvent("dive_centre_apply_clicked", { source_section: "dive_centres_page" });
     document.getElementById("apply")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -277,7 +278,7 @@ export function DiveCentresPage() {
           <h2 id="b2b-apply-heading">Apply for the Dive Centre Pilot.</h2>
           <p className="section-lede">
             Tell us about your shop. We review applications personally and reply by email — no automated
-            sales sequence.
+            sales sequence. Accepted shops receive a private onboarding link after review.
           </p>
         </Reveal>
         <Reveal delay={1}>

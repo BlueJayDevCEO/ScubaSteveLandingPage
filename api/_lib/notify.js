@@ -89,7 +89,8 @@ export async function sendEnquiryNotification(lead) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(10000)
   });
 
   if (!response.ok) {

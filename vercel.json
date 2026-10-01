@@ -15,6 +15,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/dive-centres", "destination": "/dive-centres/index.html" },
     {
       "source": "/((?!api/|.*\\..*).*)",
       "destination": "/index.html"

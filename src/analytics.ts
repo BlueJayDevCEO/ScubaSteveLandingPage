@@ -13,7 +13,7 @@ function getDeviceType() {
 
 function getPagePath() {
   if (typeof window === "undefined") return "/";
-  return `${window.location.pathname}${window.location.search}`;
+  return window.location.pathname;
 }
 
 function hasTrackedThisSession(eventName: string) {

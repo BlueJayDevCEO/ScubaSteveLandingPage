@@ -13,10 +13,11 @@ export function navigate(path: string) {
 }
 
 export function useRoutePath(): string {
-  const [path, setPath] = useState(() => window.location.pathname);
+  const routePath = () => window.location.pathname.replace(/\/+$/, "") || "/";
+  const [path, setPath] = useState(routePath);
 
   useEffect(() => {
-    const onPopState = () => setPath(window.location.pathname);
+    const onPopState = () => setPath(window.location.pathname.replace(/\/+$/, "") || "/");
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);

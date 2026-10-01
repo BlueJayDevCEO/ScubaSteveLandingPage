@@ -5,6 +5,7 @@ import { StickyCta } from "./components/StickyCta";
 import { DiveCentresPage } from "./pages/DiveCentresPage";
 import { HomePage } from "./pages/HomePage";
 import { DIVE_CENTRES_PATH, useRoutePath } from "./router";
+import { pilotMeta, updateRouteMetadata } from "./seo";
 
 const ROUTE_META: Record<string, { title: string; description: string }> = {
   "/": {
@@ -25,8 +26,7 @@ export default function App() {
 
   useEffect(() => {
     const meta = ROUTE_META[isDiveCentres ? DIVE_CENTRES_PATH : "/"];
-    document.title = meta.title;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
+    updateRouteMetadata(isDiveCentres, isDiveCentres ? pilotMeta.title : meta.title, isDiveCentres ? pilotMeta.description : meta.description);
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [isDiveCentres]);
 

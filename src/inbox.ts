@@ -15,9 +15,12 @@ export async function sendToInbox(payload: Record<string, string>): Promise<bool
     const response = await fetch("/api/business-interest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(20000)
     });
-    return response.ok;
+    if (!response.ok) return false;
+    const result = await response.json();
+    return result.ok === true;
   } catch {
     return false;
   }

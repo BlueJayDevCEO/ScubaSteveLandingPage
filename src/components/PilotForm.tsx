@@ -64,6 +64,7 @@ export function PilotForm() {
     if (ok) {
       formElement.reset();
       setState("success");
+      trackLandingEvent("dive_centre_form_success", { source_section: "pilot_form" });
       trackLandingEvent("business_form_success", {
         source_section: "pilot_form",
         visitor_type_signal: "business",
@@ -71,6 +72,7 @@ export function PilotForm() {
       });
     } else {
       setState("error");
+      trackLandingEvent("dive_centre_form_error", { source_section: "pilot_form", error_type: "delivery_failed" });
       trackLandingEvent("business_form_error", {
         source_section: "pilot_form",
         visitor_type_signal: "business",

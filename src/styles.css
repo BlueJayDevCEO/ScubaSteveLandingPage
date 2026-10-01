@@ -4,29 +4,7 @@
    Sections map 1:1 to docs/LANDING_PAGE_STRATEGY.md §12–§13.
    ===================================================================== */
 
-/* Brand display face — LEMON MILK, self-hosted (public/fonts). */
-@font-face {
-  font-family: "LEMON MILK";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/LemonMilk-Regular.woff") format("woff");
-}
-@font-face {
-  font-family: "LEMON MILK";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/LemonMilk-Medium.woff") format("woff");
-}
-@font-face {
-  font-family: "LEMON MILK";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/LemonMilk-Bold.woff") format("woff");
-}
-
+/* Display font uses the existing fallback; unavailable font files are not requested. */
 :root {
   /* Depth scale — the page descends from sunlit surface to abyss */
   --surface-0: #eaf7f9;
