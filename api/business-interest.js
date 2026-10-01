@@ -31,6 +31,7 @@ export default async function handler(req, res) {
   const email = sanitizeText(body.email, 254).toLowerCase();
   const lead = {
     visitorType,
+    enquiryTopic: sanitizeText(body.enquiryTopic, 100),
     name: sanitizeText(body.name),
     email,
     businessName: sanitizeText(body.businessName),

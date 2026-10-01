@@ -1,156 +1,80 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import { trackLandingEvent, trackLandingEventOncePerSession } from "../analytics";
 import { ENQUIRY_EMAIL, sendToInbox } from "../inbox";
 
+type Topic = "pilot" | "updates" | "general";
 type SubmitState = "idle" | "loading" | "success" | "error";
+const TOPICS = { pilot: "Dive Centre Pilot", updates: "Diver updates", general: "General enquiry" };
 
-/**
- * Dive-centre pilot application. Delivered server-side via our own
- * /api/business-interest endpoint (Resend email + optional Firestore) so it
- * reaches steve@scubasteve.rocks on any device. Reply-to is the applicant's email.
- */
-export function PilotForm() {
+export function PilotForm({ initialTopic = "pilot" }: { initialTopic?: Topic }) {
+  const [topic, setTopic] = useState<Topic>(initialTopic);
   const [state, setState] = useState<SubmitState>("idle");
-  const hasStarted = useRef(false);
+  const loading = state === "loading";
+  const isPilot = topic === "pilot";
+  const source = initialTopic === "pilot" ? "pilot_form" : "footer";
 
-  function handleFormStarted() {
-    if (hasStarted.current) return;
-    hasStarted.current = true;
-    trackLandingEventOncePerSession("dive_centre_form_started", {
-      source_section: "pilot_form"
-    });
-    trackLandingEventOncePerSession("business_form_started", {
-      source_section: "pilot_form",
-      visitor_type_signal: "business"
-    });
+  function trackPhase(phase: "started" | "submitted" | "success" | "error") {
+    const properties = { source_section: source, enquiry_topic: topic, visitor_type_signal: isPilot ? "business" : "diver" };
+    const track = phase === "started" ? trackLandingEventOncePerSession : trackLandingEvent;
+    track(`business_form_${phase}`, properties);
+    if (isPilot) track(`dive_centre_form_${phase}`, properties);
+    if (topic === "updates") track(`diver_updates_${phase}`, properties);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (state === "loading") return;
-    const formElement = event.currentTarget;
-    const form = new FormData(formElement);
-    if (form.get("websiteUrl")) return; // honeypot
-
+    if (loading) return;
+    const element = event.currentTarget;
+    const form = new FormData(element);
+    if (form.get("websiteUrl")) return;
     const fields = {
-      visitorType: "business",
+      visitorType: isPilot ? "business" : "diver",
+      enquiryTopic: TOPICS[topic],
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
+      country: String(form.get("country") || ""),
       businessName: String(form.get("businessName") || ""),
       businessType: String(form.get("businessType") || ""),
-      country: String(form.get("country") || ""),
       website: String(form.get("website") || ""),
       message: String(form.get("message") || ""),
       websiteUrl: ""
     };
-
     setState("loading");
-    trackLandingEvent("dive_centre_form_submitted", {
-      source_section: "pilot_form",
-      business_type: fields.businessType || "unspecified",
-      has_website: fields.website ? "true" : "false",
-      has_message: fields.message ? "true" : "false"
-    });
-    trackLandingEvent("business_form_submitted", {
-      source_section: "pilot_form",
-      cta_label: "Apply for the pilot",
-      visitor_type_signal: "business",
-      business_type: fields.businessType || "unspecified",
-      has_website: fields.website ? "true" : "false",
-      has_message: fields.message ? "true" : "false"
-    });
-
+    trackPhase("submitted");
     const ok = await sendToInbox(fields);
-    if (ok) {
-      formElement.reset();
-      setState("success");
-      trackLandingEvent("dive_centre_form_success", { source_section: "pilot_form" });
-      trackLandingEvent("business_form_success", {
-        source_section: "pilot_form",
-        visitor_type_signal: "business",
-        business_type: fields.businessType || "unspecified"
-      });
-    } else {
-      setState("error");
-      trackLandingEvent("dive_centre_form_error", { source_section: "pilot_form", error_type: "delivery_failed" });
-      trackLandingEvent("business_form_error", {
-        source_section: "pilot_form",
-        visitor_type_signal: "business",
-        error_type: "delivery_failed"
-      });
-    }
+    setState(ok ? "success" : "error");
+    trackPhase(ok ? "success" : "error");
+    if (ok) element.reset();
   }
 
-  const loading = state === "loading";
-
   return (
-    <form
-      className="pilot-form"
-      onFocusCapture={handleFormStarted}
-      onSubmit={handleSubmit}
-      aria-label="Dive centre pilot application"
-    >
-      <div className="form-grid">
-        <label>
-          Your name
-          <input name="name" type="text" autoComplete="name" required disabled={loading} />
-        </label>
-        <label>
-          Work email
-          <input name="email" type="email" autoComplete="email" required disabled={loading} />
-        </label>
-        <label>
-          Business name
-          <input name="businessName" type="text" autoComplete="organization" required disabled={loading} />
-        </label>
-        <label>
-          Business type
-          <select name="businessType" required defaultValue="" disabled={loading}>
-            <option value="" disabled>
-              Select one
-            </option>
-            <option>Dive Centre</option>
-            <option>Dive Resort</option>
-            <option>Liveaboard</option>
-            <option>Instructor</option>
-            <option>Travel Company</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label>
-          Country
-          <input name="country" type="text" autoComplete="country-name" required disabled={loading} />
-        </label>
-        <label>
-          Website
-          <input name="website" type="url" placeholder="Optional" disabled={loading} />
-        </label>
-      </div>
-      <label className="honeypot-field" aria-hidden="true">
-        Website URL
-        <input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" />
-      </label>
+    <form className="pilot-form" onFocusCapture={() => trackPhase("started")} onSubmit={handleSubmit} aria-label="Contact Scuba Steve">
       <label>
-        Tell us about your shop
-        <textarea
-          name="message"
-          placeholder="Optional: location, typical customers, and the questions your team answers most often."
-          disabled={loading}
-        />
+        What are you enquiring about?
+        <select name="enquiryTopic" value={topic} disabled={loading} onChange={(event) => { setTopic(event.target.value as Topic); setState("idle"); }}>
+          <option value="pilot">Dive Centre Pilot</option>
+          <option value="updates">Diver updates</option>
+          <option value="general">General enquiry</option>
+        </select>
       </label>
-      <button type="submit" className="primary-cta pilot-submit" disabled={loading}>
-        {loading ? "Sending…" : "Apply for the pilot"}
-      </button>
-      {state === "success" && (
-        <p className="success" role="status">
-          Thanks — your application is on its way to Steve. We review pilot applications personally and reply by email.
-        </p>
-      )}
-      {state === "error" && (
-        <p className="error" role="alert">
-          Something went wrong sending that. Please email <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a> directly.
-        </p>
-      )}
+      <div className="form-grid">
+        <label>Your name<input name="name" type="text" autoComplete="name" required disabled={loading} /></label>
+        <label>Email<input name="email" type="email" autoComplete="email" required disabled={loading} /></label>
+        <label>Country<input name="country" type="text" autoComplete="country-name" required disabled={loading} /></label>
+        {isPilot && <>
+          <label>Business name<input name="businessName" type="text" autoComplete="organization" required disabled={loading} /></label>
+          <label>Business type<select name="businessType" required defaultValue="" disabled={loading}>
+            <option value="" disabled>Select one</option>
+            <option>Dive Centre</option><option>Dive Resort</option><option>Liveaboard</option><option>Instructor</option><option>Travel Company</option><option>Other</option>
+          </select></label>
+          <label>Website<input name="website" type="url" placeholder="Optional" disabled={loading} /></label>
+        </>}
+      </div>
+      <label className="honeypot-field" aria-hidden="true">Website URL<input name="websiteUrl" type="text" tabIndex={-1} autoComplete="off" /></label>
+      <label>Message <span className="label-optional">(optional)</span><textarea name="message" placeholder={isPilot ? "Tell us about your shop and the questions your team answers most often." : "What would you like to ask Steve?"} disabled={loading} /></label>
+      <button type="submit" className="primary-cta pilot-submit" disabled={loading}>{loading ? "Sending…" : isPilot ? "Apply for the pilot" : "Send to Steve"}</button>
+      {state === "success" && <p className="success" role="status">Thanks — your enquiry has been received. We’ll reply by email.</p>}
+      {state === "error" && <p className="error" role="alert">Something went wrong sending that. Please email <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a> directly.</p>}
     </form>
   );
 }

@@ -31,6 +31,7 @@ function escapeHtml(value) {
 function buildRows(lead) {
   const fields = [
     ["Type", lead.visitorType === "business" ? "Dive centre / business" : "Diver"],
+    ["Enquiry topic", lead.enquiryTopic],
     ["Name", lead.name],
     ["Email", lead.email],
     ["Business", lead.businessName],

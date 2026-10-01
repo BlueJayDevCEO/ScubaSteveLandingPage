@@ -37,7 +37,7 @@ export default function App() {
       </a>
       <Nav />
       {isDiveCentres ? <DiveCentresPage /> : <HomePage />}
-      <Footer />
+      <Footer showEnquiryForm={!isDiveCentres} />
       {!isDiveCentres && <StickyCta />}
     </div>
   );

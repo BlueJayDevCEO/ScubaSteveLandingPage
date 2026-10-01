@@ -37,8 +37,10 @@ test('every submission emails; failure cannot falsely report success without sto
   const original=globalThis.fetch; const payloads=[];
   globalThis.fetch=async(url,options)=>{payloads.push(JSON.parse(options.body));return {ok:true};};
   try {
-    assert.equal((await invoke(valid)).body.emailed,true);
-    assert.equal((await invoke(valid)).body.emailed,true);
+    assert.equal((await invoke({...valid,enquiryTopic:'Dive Centre Pilot'})).body.emailed,true);
+    assert.equal((await invoke({visitorType:'diver',name:'Tester',email:'test@example.test',country:'UK',enquiryTopic:'General enquiry'})).body.emailed,true);
+    assert.match(payloads[0].text,/Enquiry topic: Dive Centre Pilot/);
+    assert.match(payloads[1].text,/Enquiry topic: General enquiry/);
     assert.equal(payloads.length,2); assert.equal(payloads[0].reply_to,valid.email);
     globalThis.fetch=async()=>({ok:false,status:500,text:async()=>''});
     assert.equal((await invoke(valid)).code,500);
