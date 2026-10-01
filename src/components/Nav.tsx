@@ -1,7 +1,7 @@
 import { trackLandingEvent } from "../analytics";
 import { APP_URL, buildAppUrl } from "../config";
 import { media } from "../media";
-import { DIVE_CENTRES_PATH, HOME_PATH, Link, useRoutePath } from "../router";
+import { DIVE_CENTRES_PATH, Link, useRoutePath } from "../router";
 
 export function Nav() {
   const path = useRoutePath();
@@ -19,7 +19,7 @@ export function Nav() {
 
   return (
     <nav className="nav" aria-label="Primary">
-      <Link to={HOME_PATH} className="brand" aria-label="Scuba Steve AI home">
+      <Link to={DIVE_CENTRES_PATH} className="brand" aria-label="Scuba Steve for dive centres">
         <img src={media.brand.oseaLogo.src} alt="" width="38" height="38" />
         <span>Scuba Steve AI</span>
       </Link>

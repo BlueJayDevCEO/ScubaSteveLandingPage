@@ -1,5 +1,5 @@
-// Production must set VITE_APP_URL to the real Scuba Steve app URL, not this landing page URL.
-export const APP_URL = import.meta.env.VITE_APP_URL || "https://scubasteverocks-1b9a9.web.app/";
+// Consumer buttons always leave this B2B property.
+export const APP_URL = "https://www.scubasteve.rocks";
 
 /**
  * Builds the outbound app URL with campaign attribution so the product's own

@@ -1,9 +1,7 @@
-const DEFAULT_ORIGIN = "https://scuba-steve-landing-page.vercel.app";
+const DEFAULT_ORIGIN = "https://centres.scubasteve.rocks";
 
 const ALLOWED_ORIGINS = new Set([
-  "https://scuba-steve-landing-page.vercel.app",
-  "https://www.scubasteve.rocks",
-  "https://scubasteve.rocks",
+  "https://centres.scubasteve.rocks",
   "http://localhost:5173",
   "http://localhost:4173",
   "http://127.0.0.1:5173",

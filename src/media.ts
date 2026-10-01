@@ -94,7 +94,7 @@ export const media = {
       safeForPublicMarketing: true
     },
     photoEnhancementBefore: {
-      src: "https://www.scubasteve.rocks/demo-color-before.svg",
+      src: "/images/colorfix-before.jpg",
       alt: "Before view of underwater photo color correction demo",
       source: "ScubaSteveRocks public/demo-color-before.svg",
       suggestedUse: "Future before-and-after photo enhancement comparison",

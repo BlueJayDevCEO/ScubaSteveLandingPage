@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.scubasteve.rocks/sitemap.xml
+Sitemap: https://centres.scubasteve.rocks/sitemap.xml

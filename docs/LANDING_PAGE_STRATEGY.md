@@ -62,7 +62,7 @@ Live page structure: Nav → Hero (photo bg + phone-frame screenshot) → Proble
 | **Page speed** | SPA with tiny JS (React + analytics only, no router lib — good). Biggest costs: Firebase-hosted hero JPG, render-blocking font-less design is actually fine. No `font-display` concerns (system/Inter fallback). | IMPROVE images |
 | **Animation** | Live: none beyond hover. V2: `Reveal` scroll-fade wrapper — but no CSS exists for it, and no `prefers-reduced-motion` block exists despite the code comment claiming it does. | FIX + extend (§13) |
 | **Accessibility** | Good bones: skip link, ARIA tabs in `DemoShowcase`, labeled forms, `role="status"/"alert"`, honeypot properly hidden. Gaps: missing reduced-motion CSS, focus styles rely on browser default for buttons, color-contrast of `#4d6870` body text on `#f0f8fa` is ~4.6:1 (passes AA, barely). | IMPROVE |
-| **SEO/metadata** | `index.html` title/meta/OG solid. **Canonical points to `https://www.scubasteve.rocks/`** — the *product* domain, not the landing domain. OG image URLs also point at scubasteve.rocks paths. This is only correct if the landing page is destined to live at that domain root. Must be resolved (§21, Risk R2). | FIX |
+| **SEO/metadata** | Dedicated centres host and crawlable pilot HTML. See B2B-DOMAIN-MIGRATION.md. | RESOLVED |
 | **Analytics** | Mature: `trackLandingEvent` wrapper adds `page_path` + `device_type`; once-per-session section-view events via IntersectionObserver; legacy event names kept alongside new ones. README's event list is stale. | KEEP + extend (§20) |
 | **Forms/API** | `/api/business-interest` with honeypot, validation, SHA-256 email dedupe, CORS allowlist, 8KB guard, Firestore `businessInterestLeads`. `/api/early-access` is retained legacy. | KEEP |
 | **Routes** | V2 adds `/dive-centres` with a history-API micro-router + correct `vercel.json` SPA rewrite. `src/routes.ts` declares four future SEO routes (unused). | KEEP router; leave future routes dormant |
@@ -444,7 +444,7 @@ Also add: `pilot_example_viewed`, `sticky_cta_clicked` (or reuse `open_scuba_ste
 
 ## 21. SEO plan
 
-1. **Canonical decision (blocking):** `index.html` canonical + OG URLs point to `https://www.scubasteve.rocks/` while the landing deploys at `scuba-steve-landing-page.vercel.app`. Either (a) the landing page becomes the site at `www.scubasteve.rocks` root (then keep canonicals, coordinate with the product app's routing), or (b) it stays on its own domain (then canonical/OG must point to that domain). Currently the Vercel URL is telling Google "index the other site instead" — deliberate cross-domain canonical, acceptable only if (a) is imminent. **Ask the founder; default assumption: (a).**
+1. **Canonical architecture (resolved):** Dedicated B2B host is `https://centres.scubasteve.rocks`; root permanently redirects to `/dive-centres`. Consumer destination is configured in `src/config.ts`. See `B2B-DOMAIN-MIGRATION.md` for the current operator checklist.
 2. Title/H1 alignment: keep keyword-bearing `<title>` (marine life ID / dive trip planner / AI scuba) but ensure H1 stays identity-led; App.tsx runtime title swap per route already works.
 3. FAQPage JSON-LD must mirror the visible FAQ (S9) — update both in one commit.
 4. Keep Organization + SoftwareApplication schema; do **not** add AggregateRating/Review (no data — would violate honesty and Google guidelines).

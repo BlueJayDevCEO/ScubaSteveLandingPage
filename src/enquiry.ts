@@ -14,7 +14,7 @@ function buildMailto(subject: string, bodyLines: string[]): string {
 const TEMPLATES: Record<EnquiryKind, { subject: string; body: string[] }> = {
   general: {
     subject: "Scuba Steve enquiry",
-    body: ["Hi Steve,", "", "[What would you like help with?]", "", "", "Sent from scubasteve.rocks"]
+    body: ["Hi Steve,", "", "[What would you like help with?]", "", "", "Sent from centres.scubasteve.rocks"]
   },
   "dive-centre": {
     subject: "Dive Centre Pilot enquiry",
@@ -28,7 +28,7 @@ const TEMPLATES: Record<EnquiryKind, { subject: string; body: string[] }> = {
       "Website:",
       "",
       "",
-      "Sent from scubasteve.rocks/dive-centres"
+      "Sent from centres.scubasteve.rocks/dive-centres"
     ]
   }
 };

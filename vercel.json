@@ -3,22 +3,45 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "no-referrer-when-downgrade" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer-when-downgrade"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; script-src-elem 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.firebasestorage.app https://www.scubasteve.rocks; connect-src 'self' https://vitals.vercel-insights.com https://*.vercel-insights.com https://firestore.googleapis.com https://oauth2.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; media-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.firebasestorage.app; upgrade-insecure-requests"
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; script-src-elem 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.firebasestorage.app; connect-src 'self' https://vitals.vercel-insights.com https://*.vercel-insights.com https://firestore.googleapis.com https://oauth2.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; media-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.firebasestorage.app; upgrade-insecure-requests"
         }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/dive-centres", "destination": "/dive-centres/index.html" },
     {
-      "source": "/((?!api/|.*\\..*).*)",
-      "destination": "/index.html"
+      "source": "/dive-centres",
+      "destination": "/dive-centres/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/dive-centres",
+      "permanent": true
+    },
+    {
+      "source": "/dive-centres/",
+      "destination": "/dive-centres",
+      "permanent": true
     }
   ]
 }
